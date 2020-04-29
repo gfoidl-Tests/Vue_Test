@@ -1,0 +1,29 @@
+{
+    "compilerOptions": {
+        "baseUrl": ".",
+        "paths"  : {
+            "@/*": ["src/ts/*"]
+        },
+
+        "target"          : "ES6",
+        "module"          : "ES2015",
+        "moduleResolution": "Node",
+        "lib"             : [ "dom", "ES2015" ],
+        "incremental"     : true,
+        "declaration"     : true,
+        "declarationMap"  : true,
+
+        "removeComments"        : true,
+        "importHelpers"         : true,
+        "experimentalDecorators": true,
+        "sourceMap"             : true,
+        "newLine"               : "lf",
+
+        "strict"                    : true,
+        "noFallthroughCasesInSwitch": true,
+        "noImplicitAny"             : true,
+        "noImplicitReturns"         : true,
+        "noUnusedLocals"            : false,
+        "noUnusedParameters"        : true
+    }
+}
