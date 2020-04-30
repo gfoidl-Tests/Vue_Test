@@ -2,10 +2,11 @@
     "compilerOptions": {
         "baseUrl": ".",
         "paths"  : {
-            "@/*": ["src/ts/*"]
+            "@/*"   : [ "src/ts/*" ],
+            "@svc/*": [ "src/ts/services/*" ]
         },
 
-        "target"          : "ES6",
+        "target"          : "ES2015",
         "module"          : "ES2015",
         "moduleResolution": "Node",
         "lib"             : [ "dom", "ES2015" ],

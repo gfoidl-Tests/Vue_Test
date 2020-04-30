@@ -1,4 +1,5 @@
-const ForkTsCheckerWebpackPlugin = require('fork-ts-checker-webpack-plugin');
+const { CleanWebpackPlugin }     = require("clean-webpack-plugin");
+const ForkTsCheckerWebpackPlugin = require("fork-ts-checker-webpack-plugin");
 const HtmlWebpackPlugIn          = require("html-webpack-plugin");
 const MiniCssExtractPlugIn       = require("mini-css-extract-plugin");
 const OptimizeCssPlugIn          = require("optimize-css-assets-webpack-plugin");
@@ -25,7 +26,8 @@ module.exports = (env, argv) => {
         resolve: {
             extensions: [".ts", ".vue", ".js"],         // when 'resolve' is not specified, in entry the extension has to be given
             alias: {
-                "@": path.resolve(__dirname, "src/ts"),
+                "@"   : path.resolve(__dirname, "src/ts"),
+                "@svc": path.resolve(__dirname, "src/ts/services"),
                 // Note: alias not needed when vue is in 'externals', as long the name matches
                 vue$  : "vue/dist/vue.esm.js"           // https://forum.vuejs.org/t/vue-2-0-warn-you-are-using-the-runtime-only-build-of-vue-where-the-template-compiler-is-not-available/9429/3
             }
@@ -83,6 +85,7 @@ module.exports = (env, argv) => {
             ]
         },
         plugins: [
+            new CleanWebpackPlugin(),
             new Webpack.DefinePlugin({
                 __DEBUG__: JSON.stringify(devMode)
             }),
