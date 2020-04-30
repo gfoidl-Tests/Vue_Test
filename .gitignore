@@ -12,3 +12,5 @@ tsconfig.tsbuildinfo
 /lib
 /out
 /dist
+/coverage
+/.nyc_output

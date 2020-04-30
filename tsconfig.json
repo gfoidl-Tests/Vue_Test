@@ -7,7 +7,7 @@
         },
 
         "target"          : "ES2015",
-        "module"          : "ES2015",
+        "module"          : "CommonJS",
         "moduleResolution": "Node",
         "lib"             : [ "dom", "ES2015" ],
         "incremental"     : true,
