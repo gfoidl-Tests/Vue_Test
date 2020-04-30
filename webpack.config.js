@@ -91,7 +91,7 @@ module.exports = (env, argv) => {
             }),
             new VueLoaderPlugin(),
             new ForkTsCheckerWebpackPlugin({
-                tsconfig: path.resolve(__dirname, "tsconfig.json"),
+                tsconfig   : path.resolve(__dirname, "src/tsconfig.json"),
                 async      : false,
                 memoryLimit: 4096,
                 vue        : true

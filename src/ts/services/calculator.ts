@@ -7,21 +7,20 @@ export class Calculator {
             return null;
         }
 
-        const math = Math.Instance();
         let result: number;
 
         switch (operation) {
             case Operation.Add:
-                result = math.add(a, b);
+                result = Math.Instance.add(a, b);
                 break;
             case Operation.Subtract:
-                result = math.subtract(a, b);
+                result = Math.Instance.subtract(a, b);
                 break;
             case Operation.Multiply:
-                result = math.multiply(a, b);
+                result = Math.Instance.multiply(a, b);
                 break;
             case Operation.Divide:
-                result = math.divide(a, b);
+                result = Math.Instance.divide(a, b);
                 break;
             default:
                 throw new Error("unknown operation");
