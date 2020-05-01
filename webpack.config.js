@@ -34,7 +34,8 @@ module.exports = (env, argv) => {
                 //"@svc": path.resolve(__dirname, "src", "ts", "services"),
 
                 // Note: alias not needed when vue is in 'externals', as long the name matches
-                vue$  : "vue/dist/vue.esm.js"           // https://forum.vuejs.org/t/vue-2-0-warn-you-are-using-the-runtime-only-build-of-vue-where-the-template-compiler-is-not-available/9429/3
+                // Note2: runtime only can be used when there are no template-strings used -- see app.ts for more info
+                //vue$  : "vue/dist/vue.esm.js"         // https://forum.vuejs.org/t/vue-2-0-warn-you-are-using-the-runtime-only-build-of-vue-where-the-template-compiler-is-not-available/9429/3
             },
             plugins: [
                 new TsconfigPathsPlugin({
@@ -95,7 +96,6 @@ module.exports = (env, argv) => {
             ]
         },
         plugins: [
-            new CleanWebpackPlugin(),
             new Webpack.DefinePlugin({
                 __DEBUG__: JSON.stringify(devMode)
             }),
@@ -147,6 +147,14 @@ module.exports = (env, argv) => {
             //}
         }
     };
+
+    // Inject CleanWebpackPlugin when not using dev-server. With the dev-server
+    // there is a deadlock anywhere :-(
+    const runsInDevServer = /webpack-dev-server.js$/.test(argv.$0);
+    if (!runsInDevServer) {
+        config.plugins.unshift(new CleanWebpackPlugin());
+        console.log("added CleanWebpackPlugin");
+    }
 
     return config;
 };

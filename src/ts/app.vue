@@ -39,6 +39,10 @@
 </template>
 
 <style lang="less" scoped>
+    h2 {
+        margin: 0.5em 0;
+    }
+
     .result {
         color: #0094ff;
     }
