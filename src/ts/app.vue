@@ -25,14 +25,22 @@
                     <b-button type="reset" variant="danger">Reset</b-button>
                 </b-form>
 
-                <hr v-if="result !== null || message.length > 0" />
+                <hr />
 
-                <div v-if="result !== null">
-                    Result: <strong class="result">{{ result }}</strong>
-                </div>
-                <div v-if="message.length > 0">
-                    <strong class="message">{{ message }}</strong>
-                </div>
+                <b-row>
+                    <b-col>
+                        <div v-if="result !== null">
+                            Result: <strong class="result">{{ result }}</strong>
+                        </div>
+                        <div v-if="message.length > 0">
+                            <strong class="message">{{ message }}</strong>
+                        </div>
+                    </b-col>
+
+                    <b-col>
+                        <foot-notes></foot-notes>
+                    </b-col>
+                </b-row>
             </b-col>
         </b-row>
     </b-container>
@@ -55,8 +63,14 @@
 <script lang="ts">
     import { Vue, Component } from "vue-property-decorator";
     import * as calc          from "@svc/calculator";
+
+    import Footer from "@cmp/footer.vue";
     //-------------------------------------------------------------------------
-    @Component
+    @Component({
+        components: {
+            "FootNotes": Footer
+        }
+    })
     export default class App extends Vue {
         private operation: calc.Operation;
         public input     : Input;

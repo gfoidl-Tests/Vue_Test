@@ -3,7 +3,8 @@
         "baseUrl": ".",
         "paths"  : {
             "@/*"   : [ "src/ts/*" ],
-            "@svc/*": [ "src/ts/services/*" ]
+            "@svc/*": [ "src/ts/services/*" ],
+            "@cmp/*": [ "src/ts/components/*" ]
         },
 
         "target"          : "ES2015",
