@@ -1,6 +1,7 @@
 <template>
     <footer class="app-footer-copyright">
-        © gfoidl, {{ year }}
+        © gfoidl, {{ year }}<br />
+        commit: {{ version }}
     </footer>
 </template>
 
@@ -18,6 +19,7 @@
     @Component
     export default class Footer extends Vue {
         public year: number;
+        public version = VERSION;   // defined by webpack
         //---------------------------------------------------------------------
         constructor() {
             super();

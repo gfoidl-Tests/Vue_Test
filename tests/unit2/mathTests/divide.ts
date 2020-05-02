@@ -14,6 +14,6 @@ export class Math_Divide_Tests {
     //-------------------------------------------------------------------------
     @Test()
     public Divisor_is_0___throws_RangeError(): void {
-        Expect(() => Math.Instance.divide(1, 0)).toThrowError(RangeError, "Divisor must not be 0");
+        Expect(() => Math.Instance.divide(1, 0)).toThrowError(RangeError, "Divisor must not be 0.");
     }
 }

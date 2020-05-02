@@ -19,5 +19,8 @@ module.exports = {
     //    "^@/(.*)$"   : "<rootDir>/src/ts/$1",
     //    "^@svc/(.*)$": "<rootDir>/src/ts/services/$1"
     //},
-    coverageReporters: ["text", "cobertura", "html"]    // https://github.com/istanbuljs/istanbuljs/tree/master/packages/istanbul-reports/lib
+    coverageReporters: ["text", "cobertura", "html"],   // https://github.com/istanbuljs/istanbuljs/tree/master/packages/istanbul-reports/lib
+    globals: {
+        VERSION: "42"
+    }
 };

@@ -1,5 +1,6 @@
 const { CleanWebpackPlugin }     = require("clean-webpack-plugin");
 const ForkTsCheckerWebpackPlugin = require("fork-ts-checker-webpack-plugin");
+const GitRevisionPlugin          = require("git-revision-webpack-plugin");
 const HtmlWebpackPlugIn          = require("html-webpack-plugin");
 const MiniCssExtractPlugIn       = require("mini-css-extract-plugin");
 const OptimizeCssPlugIn          = require("optimize-css-assets-webpack-plugin");
@@ -18,7 +19,8 @@ module.exports = (env, argv) => {
         console.log("Production mode");
     }
 
-    const tsConfigFile = path.resolve(__dirname, "src", "tsconfig.json");
+    const tsConfigFile      = path.resolve(__dirname, "src", "tsconfig.json");
+    const gitRevisionPlugin = new GitRevisionPlugin();
 
     const config = {
         mode   : devMode ? "development" : "production",
@@ -96,8 +98,10 @@ module.exports = (env, argv) => {
             ]
         },
         plugins: [
+            gitRevisionPlugin,
             new Webpack.DefinePlugin({
-                __DEBUG__: JSON.stringify(devMode)
+                __DEBUG__: JSON.stringify(devMode),
+                VERSION  : JSON.stringify(gitRevisionPlugin.version())
             }),
             new VueLoaderPlugin(),
             new ForkTsCheckerWebpackPlugin({

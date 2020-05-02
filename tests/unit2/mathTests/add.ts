@@ -16,6 +16,6 @@ export class Math_Add_Tests {
     @TestCase(9007199254740992, 1)
     @TestCase(1, 9007199254740992)
     public MaxValue_plus_1___throws_RangeError(a: number, b: number): void {
-        Expect(() => Math.Instance.add(a, b)).toThrowError(RangeError, "Summand(s) must not be MAX_SAFE_INTEGER (or greater)");
+        Expect(() => Math.Instance.add(a, b)).toThrowError(RangeError, "Summand(s) must not be MAX_SAFE_INTEGER (or greater).");
     }
 }
