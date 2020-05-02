@@ -1,16 +1,21 @@
-import Math from "@svc/math";
+import "tsconfig-paths/register";
+import Math                              from "@svc/math";
+import { TestFixture, TestCase, Expect } from "alsatian";
 //-----------------------------------------------------------------------------
-describe("Math.add", () => {
-    test("summands given -> correct sum", () => {
-        const actual = Math.Instance.add(2, 1);
+@TestFixture()
+export class Math_Add_Tests {
+    @TestCase(0, 0, 0)
+    @TestCase(1, 2, 3)
+    @TestCase(2, 1, 3)
+    public Summands_given___correct_sum(a: number, b: number, res: number): void {
+        const actual = Math.Instance.add(a, b);
 
-        expect(actual).toBe(3);
-    });
+        Expect(actual).toBe(res);
+    }
     //-------------------------------------------------------------------------
-    test("MaxValue + 1 -> throws RangeError", () => {
-        const a = 9007199254740992;
-        const b = 1;
-
-        expect(() => Math.Instance.add(a, b)).toThrowError(RangeError);
-    });
-});
+    @TestCase(9007199254740992, 1)
+    @TestCase(1, 9007199254740992)
+    public MaxValue_plus_1___throws_RangeError(a: number, b: number): void {
+        Expect(() => Math.Instance.add(a, b)).toThrowError(RangeError, "Summand(s) must not be MAX_SAFE_INTEGER (or greater)");
+    }
+}

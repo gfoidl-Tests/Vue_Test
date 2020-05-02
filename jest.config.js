@@ -8,8 +8,8 @@ module.exports = {
         "^.+\\.ts?$": "ts-jest"
     },
     testMatch: [
-        "**/tests/vue/**/*.[tj]s",
-        "**/tests/unit2/**/*.[tj]s"
+        "**/tests/unit/**/*.[tj]s",
+        "**/tests/vue/**/*.[tj]s"
     ],
     moduleNameMapper: pathsToModuleNameMapper(compilerOptions.paths, {
         prefix: "<rootDir>/"

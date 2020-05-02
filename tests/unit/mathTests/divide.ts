@@ -1,19 +1,17 @@
-import "tsconfig-paths/register";
-import Math                                    from "@svc/math";
-import { TestFixture, TestCase, Test, Expect } from "alsatian";
+import Math from "@svc/math";
 //-----------------------------------------------------------------------------
-@TestFixture()
-export class Math_Divide_Tests {
-    @TestCase(0, 1, 0)
-    @TestCase(10, 2, 5)
-    public Args_given___correct_quotient(a: number, b: number, res: number): void {
+describe("Math.divide", () => {
+    test.each`
+        a    | b    | expected
+       ${0}  | ${1} | ${0}
+       ${10} | ${2} | ${5}
+    `("summands given -> correct sum", ({ a, b, expected }) => {
         const actual = Math.Instance.divide(a, b);
 
-        Expect(actual).toBe(res);
-    }
+        expect(actual).toBe(expected);
+    });
     //-------------------------------------------------------------------------
-    @Test()
-    public Divisor_is_0___throws_RangeError(): void {
-        Expect(() => Math.Instance.divide(1, 0)).toThrowError(RangeError, "Divisor must not be 0");
-    }
-}
+    test("divisor is 0 -> throws RangeError", () => {
+        expect(() => Math.Instance.divide(1, 0)).toThrowError(RangeError);
+    });
+});

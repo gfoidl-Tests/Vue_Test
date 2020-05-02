@@ -5,16 +5,16 @@
     "author"     : "gfoidl",
     "license"    : "(c) gfoidl, 2020",
     "private"    : true,
-    "scripts"    : {
-        "build"             : "webpack --mode=development",
-        "build-watch"       : "webpack --mode=development --watch",
-        "build-release"     : "webpack --mode=production",
-        "start"             : "webpack-dev-server --open --hot",
-        "unit-test"         : "alsatian tests/unit/**/*.ts",
-        "unit-test-results" : "alsatian tests/unit/**/*.ts --tap | tap-junit -o out/tests -n test-results.xml",
-        "unit-test-coverage": "nyc --reporter=cobertura --reporter=html yarn run unit-test && nyc report",
-        "jest"              : "jest",
-        "jest-coverage"     : "jest --coverage"
+    "scripts": {
+        "build"                 : "webpack --mode=development",
+        "build-watch"           : "webpack --mode=development --watch",
+        "build-release"         : "webpack --mode=production",
+        "start"                 : "webpack-dev-server --open --hot",
+        "jest"                  : "jest",
+        "jest-coverage"         : "jest --reporters=default --reporters=jest-junit --coverage",
+        "alsatian-test"         : "alsatian tests/unit2/**/*.ts",
+        "alsatian-test-results" : "alsatian tests/unit2/**/*.ts --tap | tap-junit -o out/tests -n test-results.xml",
+        "alsatian-test-coverage": "nyc --reporter=cobertura --reporter=html yarn run unit-test && nyc report"
     },
     "dependencies": {
         "bootstrap-vue": "^2.13.0",
@@ -31,6 +31,7 @@
         "fork-ts-checker-webpack-plugin"    : "^4.1.3",
         "html-webpack-plugin"               : "^4.2.1",
         "jest"                              : "^25.5.2",
+        "jest-junit"                        : "^10.0.0",
         "less"                              : "^3.11.1",
         "less-loader"                       : "^6.0.0",
         "mini-css-extract-plugin"           : "^0.9.0",

@@ -13,3 +13,4 @@ tsconfig.tsbuildinfo
 /dist
 /coverage
 /.nyc_output
+/junit.xml

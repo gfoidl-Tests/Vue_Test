@@ -1,1 +1,1 @@
-Unit tests with [alsatian](https://github.com/alsatian-test/alsatian).
+Unit tests with [jest](https://jestjs.io/).
