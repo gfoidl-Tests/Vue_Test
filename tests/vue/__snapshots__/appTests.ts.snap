@@ -1,0 +1,10 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`App.vue correct options set 1`] = `
+"<select id=\\"input-op\\" required=\\"required\\" aria-required=\\"true\\" class=\\"custom-select\\">
+  <option value=\\"Add\\">Add</option>
+  <option value=\\"Subtract\\">Subtract</option>
+  <option value=\\"Multiply\\">Multiply</option>
+  <option value=\\"Divide\\">Divide</option>
+</select>"
+`;

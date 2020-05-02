@@ -21,18 +21,18 @@
                         <b-form-select id="input-op" v-model="input.operation" :options="operations" required></b-form-select>
                     </b-form-group>
 
-                    <b-button type="submit" variant="primary">Calculate</b-button>
-                    <b-button type="reset" variant="danger">Reset</b-button>
+                    <b-button id="calcButton" type="submit" variant="primary" :disabled="!canCalc">Calculate</b-button>
+                    <b-button id="resetButton" type="reset" variant="danger">Reset</b-button>
                 </b-form>
 
                 <hr />
 
                 <b-row>
-                    <b-col>
-                        <div v-if="result !== null">
+                    <b-col id="resultCol">
+                        <div v-if="result !== null" id="resultDiv">
                             Result: <strong class="result">{{ result }}</strong>
                         </div>
-                        <div v-if="message.length > 0">
+                        <div v-if="message.length > 0" id="messageDiv">
                             <strong class="message">{{ message }}</strong>
                         </div>
                     </b-col>
@@ -100,18 +100,18 @@
         public calculate(): void {
             this.operation = calc.toOperation(this.input.operation);
 
-            console.log(JSON.stringify(this.input));
+            //console.log(JSON.stringify(this.input));
 
             try {
                 this.result  = calc.Calculator.calculate(this.operation, this.input.a, this.input.b);
                 this.message = "";
 
-                console.log(`result: ${this.result}`);
+                //console.log(`result: ${this.result}`);
             } catch (e) {
                 this.result  = null;
                 this.message = e.message;
 
-                console.error("error: ", e);
+                //console.error("error: ", e);
             }
         }
         //---------------------------------------------------------------------
@@ -124,6 +124,19 @@
 
             this.result  = null;
             this.message = "";
+        }
+        //---------------------------------------------------------------------
+        get canCalc(): boolean {
+            return this.isValidNumber(this.input.a)
+                && this.isValidNumber(this.input.b);
+        }
+        //---------------------------------------------------------------------
+        private isValidNumber(val: calc.NullableNumber): boolean {
+            // an empty number is of type string due the binding with .number
+            // above in the template
+
+            return typeof val === "number"
+                && val !== null;
         }
     }
     //-------------------------------------------------------------------------

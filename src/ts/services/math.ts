@@ -7,7 +7,7 @@ export default class Math {
     //-------------------------------------------------------------------------
     public add(a: number, b: number): number {
         if (a === Number.MAX_SAFE_INTEGER + 1 || b === Number.MAX_SAFE_INTEGER + 1)
-            throw new RangeError("Summand(s) must not be MAX_SAFE_INTEGER (or greater)");
+            throw new RangeError("Summand(s) must not be MAX_SAFE_INTEGER (or greater).");
 
         return a + b;
     }
@@ -21,7 +21,7 @@ export default class Math {
     }
     //-------------------------------------------------------------------------
     public divide(a: number, b: number): number {
-        if (b === 0) throw RangeError("Divisor must not be 0");
+        if (b === 0) throw RangeError("Divisor must not be 0.");
 
         return a / b;
     }
