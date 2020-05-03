@@ -1,6 +1,7 @@
 {
     "extends"        : "../tsconfig.json",
     "compilerOptions": {
-        "module": "ES2015"  // allows more optimizations for webpack
+        "module": "ES2015",     // allows more optimizations for webpack
+        "types" : []            // don't include any visible types, otherwise build-failure (from @jest, etc. may result)
     }
 }
