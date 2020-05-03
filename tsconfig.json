@@ -4,7 +4,8 @@
         "paths"  : {
             "@/*"   : [ "src/ts/*" ],
             "@svc/*": [ "src/ts/services/*" ],
-            "@cmp/*": [ "src/ts/components/*" ]
+            "@cmp/*": [ "src/ts/components/*" ],
+            "@img/*": [ "src/images/*" ]
         },
 
         "target"          : "ES2015",

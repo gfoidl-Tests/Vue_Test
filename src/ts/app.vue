@@ -2,7 +2,8 @@
     <b-container>
         <b-row>
             <b-col>
-                <h2>Calculator</h2>
+                <b-img right src="@img/calculator.png" height="64px"></b-img>
+                <h2>Calculator</h2> <!-- must come after img due to float -->
             </b-col>
         </b-row>
         <hr />
