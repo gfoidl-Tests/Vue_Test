@@ -5,5 +5,6 @@ module.exports = {
         // but I want to exclude e2e here
         "<rootDir>/tests/unit",
         "<rootDir>/tests/vue"
-    ]
+    ],
+    coverageReporters: ["text", "cobertura", "html"],   // https://github.com/istanbuljs/istanbuljs/tree/master/packages/istanbul-reports/lib
 };
