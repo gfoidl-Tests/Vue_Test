@@ -12,5 +12,6 @@ tsconfig.tsbuildinfo
 /out
 /dist
 /coverage
+/screenshots
 /.nyc_output
 /junit.xml
