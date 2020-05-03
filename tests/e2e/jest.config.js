@@ -8,5 +8,6 @@ module.exports = {
     },
     testMatch: [
         "**/*.ts"
-    ]
+    ],
+    testTimeout: 10000
 };
