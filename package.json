@@ -13,7 +13,7 @@
         "test"                  : "jest",
         "test-unit"             : "jest --projects tests/unit",
         "test-vue"              : "jest --projects tests/vue",
-        "test-e2e"              : "cross-env JEST_PUPPETEER_CONFIG=tests/e2e/jest-puppeteer.config.js jest --projects tests/e2e",
+        "test-e2e"              : "cross-env JEST_PUPPETEER_CONFIG=tests/e2e/jest-puppeteer.config.js jest --projects tests/e2e --reporters=default --reporters=jest-junit",
         "test-coverage"         : "jest --reporters=default --reporters=jest-junit --coverage",
         "alsatian-test"         : "alsatian tests/unit2/**/*.ts",
         "alsatian-test-results" : "alsatian tests/unit2/**/*.ts --tap | tap-junit -o out/tests -n test-results.xml",
