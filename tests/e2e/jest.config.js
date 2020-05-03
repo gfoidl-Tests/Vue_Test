@@ -9,5 +9,8 @@ module.exports = {
     testMatch: [
         "**/*.ts"
     ],
+    modulePathIgnorePatterns: [
+        "helper.ts"
+    ],
     testTimeout: 10000
 };

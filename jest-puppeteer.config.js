@@ -6,9 +6,8 @@ module.exports = {
         slowMo  : process.env.SLOWMO
     },
     server: {
-        command      : "yarn serve dist --no-clipboard --listen 8080",
-        port         : 8080,
-        protocol     : "http",
-        launchTimeout: 10000
+        command : "yarn serve dist --no-clipboard --listen 8080",
+        port    : 8080,
+        protocol: "http"
     }
 };

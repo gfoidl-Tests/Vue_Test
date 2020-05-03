@@ -2,7 +2,7 @@
     <b-container>
         <b-row>
             <b-col>
-                <b-img right src="@img/calculator.png" height="64px"></b-img>
+                <b-img right src="@img/calculator.png" class="img-logo" height="64px"></b-img>
                 <h2>Calculator</h2> <!-- must come after img due to float -->
             </b-col>
         </b-row>
@@ -50,6 +50,17 @@
 <style lang="less" scoped>
     h2 {
         margin: 0.5em 0;
+    }
+
+    /*
+        Could be done with Vue too. But Vue is for the logic and not for the cosmetic, as here.
+        In Vue the result and message is set, because their visibility depends on the logic.
+        Hence this case here should be handled by CSS.
+    */
+    @media (max-width: 250px) {
+        .img-logo {
+            display: none !important;
+        }
     }
 
     .result {
