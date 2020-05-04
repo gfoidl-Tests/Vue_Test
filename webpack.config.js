@@ -10,9 +10,12 @@ const TerserPlugin               = require("terser-webpack-plugin");
 const TsconfigPathsPlugin        = require("tsconfig-paths-webpack-plugin");
 const VueLoaderPlugin            = require("vue-loader/lib/plugin");
 const Webpack                    = require("webpack");
+
+// https://github.com/webpack-contrib/webpack-bundle-analyzer
+const BundleAnalyzerPlugIn = require("webpack-bundle-analyzer");
 //-----------------------------------------------------------------------------
 module.exports = (env, argv) => {
-    const devMode = env !== "production" && argv.mode !== "production";
+    const devMode = process.env !== "PRODUCTION" && argv.mode !== "production";
 
     if (devMode) {
         console.log("Development mode");
@@ -50,6 +53,7 @@ module.exports = (env, argv) => {
         module: {
             rules: [
                 {
+                    // If there is only one loader no use: [...] is needed
                     test   : /\.ts$/,
                     loader : "ts-loader",
                     exclude: /node_modules/,
@@ -82,6 +86,7 @@ module.exports = (env, argv) => {
                 },
                 // below is for assets -> https://webpack.js.org/guides/asset-management/
                 {
+                    // Several loaders apply, they are processed from the end of the array
                     test: /\.(le|c)ss$/,
                     use : [
                         {
@@ -92,32 +97,31 @@ module.exports = (env, argv) => {
                             }
                         },
                         "css-loader",
-                        "less-loader"
+                        {
+                            loader : "less-loader",
+                            options: {
+                                lessOptions: {
+                                    strictMath: true    // needed for Bootstrap: https://github.com/twbs/bootstrap/issues/28419
+                                }
+                            }
+                        }
                     ]
                 },
                 {
                     test: /\.(png|jpg|gif)$/i,
-                    use : [
-                        {
-                            loader : "url-loader",
-                            options: {
-                                esModule: false,        // https://github.com/vuejs/vue-loader/issues/1612
-                                limit   : 8192          // bytes
-                            }
-                        }
-                    ]
+                    loader : "url-loader",
+                    options: {
+                        esModule: false,                // https://github.com/vuejs/vue-loader/issues/1612    
+                        limit   : 8192                  // bytes
+                    }
                 },
                 {
-                    test: /\.svg$/i,
-                    use : [
-                        {
-                            loader : "url-loader",
-                            options: {
-                                esModule  : false,       // see above
-                                generator : content => svgToMiniDataUri(content.toString())
-                            }
-                        }
-                    ]
+                    test   : /\.svg$/i,
+                    loader : "url-loader",
+                    options: {
+                        esModule : false,               // see above
+                        generator: content => svgToMiniDataUri(content.toString())
+                    }
                 }
             ]
         },
@@ -182,6 +186,12 @@ module.exports = (env, argv) => {
     if (!runsInDevServer) {
         config.plugins.unshift(new CleanWebpackPlugin());
         console.log("added CleanWebpackPlugin");
+    }
+
+    if (process.env.ANALYZE) {
+        const analyzer = new BundleAnalyzerPlugIn.BundleAnalyzerPlugin();
+        config.plugins.push(analyzer);
+        console.log("added BundleAnalyzerPlugin");
     }
 
     return config;

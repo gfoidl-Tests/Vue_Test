@@ -3,8 +3,10 @@ import BootstrapVue from "bootstrap-vue";
 
 import App from "@/app.vue";
 
+import "bootstrap/dist/css/bootstrap.css";
 import "bootstrap-vue/dist/bootstrap-vue.css";
 //-----------------------------------------------------------------------------
+Vue.config.productionTip = false;
 Vue.use(BootstrapVue);
 
 // Needs the vue runtime compiler -- see webpack.config.js resolve.alias

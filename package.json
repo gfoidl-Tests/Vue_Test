@@ -20,6 +20,7 @@
         "alsatian-test-coverage": "nyc --reporter=cobertura --reporter=html yarn run unit-test && nyc report"
     },
     "dependencies": {
+        "bootstrap"    : "^4.4.1",
         "bootstrap-vue": "^2.13.0",
         "vue"          : "^2.6.11"
     },
@@ -65,6 +66,7 @@
         "vue-property-decorator"            : "^8.2.2",
         "vue-template-compiler"             : "^2.6.10",
         "webpack"                           : "^4.41.0",
+        "webpack-bundle-analyzer"           : "^3.7.0",
         "webpack-cli"                       : "^3.3.11",
         "webpack-dev-server"                : "^3.8.1"
     }
