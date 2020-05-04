@@ -5,8 +5,7 @@
     </footer>
 </template>
 
-<style lang="less">
-
+<style lang="less" scoped>
     .app-footer-copyright {
         font-size: x-small;
         text-align: right;
