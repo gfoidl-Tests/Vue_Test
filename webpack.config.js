@@ -113,8 +113,9 @@ module.exports = (env, argv) => {
                         {
                             loader : "url-loader",
                             options: {
-                                esModule : false,       // see above
-                                generator: content => svgToMiniDataUri(content.toString())
+                                esModule  : false,       // see above
+                                publicPath: "assets/",
+                                generator : content => svgToMiniDataUri(content.toString())
                             }
                         }
                     ]
