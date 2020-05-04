@@ -158,9 +158,10 @@ module.exports = (env, argv) => {
                         minChunks: 2
                     },
                     common: {
-                        test  : /[\\/]node_modules[\\/]/,
-                        name  : "common",
-                        chunks: "all"
+                        test   : /[\\/]node_modules[\\/]/,
+                        name   : "common",
+                        chunks : "all",
+                        maxSize: !devMode ? 500000 : undefined  // dev-server doesn't like it
                     }
                 }
             },
