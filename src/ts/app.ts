@@ -1,13 +1,13 @@
-import Vue          from "vue";
-import BootstrapVue from "bootstrap-vue";
-
-import App from "@/app.vue";
-
-import "bootstrap/dist/css/bootstrap.css";
-import "bootstrap-vue/dist/bootstrap-vue.css";
+import Vue            from "vue";
+import App            from "@/app.vue";
+import setupBootstrap from "./setup-bootstrap";
 //-----------------------------------------------------------------------------
 Vue.config.productionTip = false;
-Vue.use(BootstrapVue);
+setupBootstrap();
+
+// To keep the size small, the individual components are imported instead the
+// global registration of all -- which is useful if quite a lot get used...
+//Vue.use(BootstrapVue);
 
 // Needs the vue runtime compiler -- see webpack.config.js resolve.alias
 // Otherwise: [Vue warn]: You are using the runtime-only build of Vue where the template compiler is not available. 
