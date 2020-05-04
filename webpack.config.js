@@ -122,7 +122,7 @@ module.exports = (env, argv) => {
             ]
         },
         plugins: [
-            gitRevisionPlugin,
+            //gitRevisionPlugin,                        // uncomment to write VERSION and COMMITHASH files to output
             new Webpack.DefinePlugin({
                 __DEBUG__: JSON.stringify(devMode),
                 VERSION  : JSON.stringify(gitRevisionPlugin.version())
