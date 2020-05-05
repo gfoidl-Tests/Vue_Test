@@ -12,8 +12,7 @@
     import LoadingError from "@cmp/loading-error.vue";
 
     const MainView = () => ({
-        // Webpack will prefetch this for us, so no need for /* webpackPreload: true */ 
-        component: import(/* webpackChunkName: "main" */ "@view/main.vue") as any,     // https://github.com/vuejs/vue-class-component/issues/323#issuecomment-479834166
+        component: import(/* webpackChunkName: "main", webpackPreload: true */ "@view/main.vue") as any,     // https://github.com/vuejs/vue-class-component/issues/323#issuecomment-479834166
         loading  : Loading,
         error    : LoadingError
     });

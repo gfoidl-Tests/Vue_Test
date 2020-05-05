@@ -5,6 +5,7 @@ const HtmlWebpackPlugIn          = require("html-webpack-plugin");
 const MiniCssExtractPlugIn       = require("mini-css-extract-plugin");
 const OptimizeCssPlugIn          = require("optimize-css-assets-webpack-plugin");
 const path                       = require("path");
+const PreloadWebpackPlugin       = require("preload-webpack-plugin");
 const svgToMiniDataUri           = require("mini-svg-data-uri");
 const TerserPlugin               = require("terser-webpack-plugin");
 const TsconfigPathsPlugin        = require("tsconfig-paths-webpack-plugin");
@@ -146,13 +147,25 @@ module.exports = (env, argv) => {
                 memoryLimit: 4096,
                 vue        : true
             }),
+            new MiniCssExtractPlugIn({
+                filename     : devMode ? "[name].css" : "[name].[hash].css",
+                chunkFilename: devMode ? "[id].css"   : "[id].[hash].css"
+            }),
             new HtmlWebpackPlugIn({
                 template: "../index.html",
                 filename: path.resolve(__dirname, "dist", "index.html")
             }),
-            new MiniCssExtractPlugIn({
-                filename     : devMode ? "[name].css" : "[name].[hash].css",
-                chunkFilename: devMode ? "[id].css"   : "[id].[hash].css"
+            new PreloadWebpackPlugin({
+                rel          : "preload",
+                include      : "allAssets",
+                fileWhitelist: [
+                    /loading.*gif/,
+                    /main.*.js$/
+                ],
+                as(entry) {
+                    if (/\.gif$/.test(entry)) return "image";
+                    return "script";
+                }
             })
         ],
         optimization: {
