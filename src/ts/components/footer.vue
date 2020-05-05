@@ -7,7 +7,7 @@
 
 <style lang="less" scoped>
     .app-footer-copyright {
-        font-size: x-small;
+        font-size : x-small;
         text-align: right;
     }
 </style>

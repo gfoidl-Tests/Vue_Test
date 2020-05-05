@@ -1,12 +1,12 @@
-import Vue            from "vue";
-import App            from "@/app.vue";
-import setupBootstrap from "./setup-bootstrap";
+import Vue from "vue";
+import App from "@/app.vue";
 //-----------------------------------------------------------------------------
 Vue.config.productionTip = false;
-setupBootstrap();
 
-// To keep the size small, the individual components are imported instead the
-// global registration of all -- which is useful if quite a lot get used...
+// This would register all BootstrapVue components. It's huge.
+// So in order to keep the initial chunk size down, the App component
+// asynchronosly loads the MainView component, and this component registers
+// BootstrapVue
 //Vue.use(BootstrapVue);
 
 // Needs the vue runtime compiler -- see webpack.config.js resolve.alias

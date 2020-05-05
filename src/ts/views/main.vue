@@ -74,9 +74,12 @@
 
 <script lang="ts">
     import { Vue, Component } from "vue-property-decorator";
+    import setupBootstrap     from "@/setup-bootstrap";
     import * as calc          from "@svc/calculator";
 
     import Footer from "@cmp/footer.vue";
+    //-------------------------------------------------------------------------
+    setupBootstrap();
     //-------------------------------------------------------------------------
     @Component({
         components: {
