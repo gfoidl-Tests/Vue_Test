@@ -2,13 +2,13 @@ import Vue from "vue";
 import App from "@/app.vue";
 //-----------------------------------------------------------------------------
 Vue.config.productionTip = false;
-
+//-----------------------------------------------------------------------------
 // This would register all BootstrapVue components. It's huge.
 // So in order to keep the initial chunk size down, the App component
 // asynchronosly loads the MainView component, and this component registers
 // BootstrapVue
 //Vue.use(BootstrapVue);
-
+//-----------------------------------------------------------------------------
 // Needs the vue runtime compiler -- see webpack.config.js resolve.alias
 // Otherwise: [Vue warn]: You are using the runtime-only build of Vue where the template compiler is not available. 
 //const app = new Vue({
@@ -28,3 +28,14 @@ const app = new Vue({
 //const app = new Vue({
 //    render: r => r(App)
 //}).$mount("app");
+//-----------------------------------------------------------------------------
+if ("serviceWorker" in navigator) {
+    window.addEventListener("load", async () => {
+        try {
+            const registration = await navigator.serviceWorker.register("sw.js");
+            console.info("SW registered: ", registration);
+        } catch (e) {
+            console.error("SW registration failed: ", e);
+        }
+    });
+}
