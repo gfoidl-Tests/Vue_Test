@@ -44,6 +44,7 @@
                 </b-row>
             </b-col>
         </b-row>
+        <on-offline></on-offline>
     </b-container>
 </template>
 
@@ -77,7 +78,8 @@
     import setupBootstrap     from "@/setup-bootstrap";
     import * as calc          from "@svc/calculator";
 
-    import Footer from "@cmp/footer.vue";
+    import Footer    from "@cmp/footer.vue";
+    import OnOffline from "@cmp/on-offline.vue";
     //-------------------------------------------------------------------------
     // Fabalouse hack for testing with jest, otherwise there are some build
     // failures which seem strange to me...
@@ -89,7 +91,8 @@
     //-------------------------------------------------------------------------
     @Component({
         components: {
-            "FootNotes": Footer
+            "FootNotes": Footer,
+            OnOffline
         }
     })
     export default class MainView extends Vue {
