@@ -26,6 +26,13 @@ module.exports = (env, argv) => {
     const tsConfigFile      = path.resolve(__dirname, "src", "tsconfig.json");
     const gitRevisionPlugin = new GitRevisionPlugin();
 
+    const imgBaseOptions = {
+        esModule  : false,                              // https://github.com/vuejs/vue-loader/issues/1612
+        limit     : 8192,                               // bytes
+        name      : devMode ? "[name].[ext]" : "[name].[hash].[ext]",
+        outputPath: "images"
+    };
+
     const config = {
         mode   : devMode ? "development" : "production",
         context: path.resolve(__dirname, "src", "ts"),  // resolve vs. join -> https://stackoverflow.com/a/39836259/347870
@@ -47,7 +54,9 @@ module.exports = (env, argv) => {
         },
         output: {
             path      : path.resolve(__dirname, "dist", "assets"),
-            publicPath: "assets/",                      // trailing / is mandatory
+            // Don't make it relative to root (i.e. no leading /), so that it can be hosted everywhere (e.g. GH-pages)
+            // Trailing / is mandatory, as the strings are just concatenated instead of handled properly :-(
+            publicPath: "assets/",
             filename  : devMode ? "[name].js" : "[name].[hash].js"
         },
         module: {
@@ -92,8 +101,9 @@ module.exports = (env, argv) => {
                         {
                             loader: MiniCssExtractPlugIn.loader,
                             options: {
-                                esModule: true,         // enables e.g. tree-shaking
-                                hmr     : devMode
+                                esModule  : true,       // enables e.g. tree-shaking
+                                hmr       : devMode,
+                                publicPath: "./"        // CSS-path are relative to the CSS-file location
                             }
                         },
                         "css-loader",
@@ -110,16 +120,13 @@ module.exports = (env, argv) => {
                 {
                     test: /\.(png|jpg|gif)$/i,
                     loader : "url-loader",
-                    options: {
-                        esModule: false,                // https://github.com/vuejs/vue-loader/issues/1612    
-                        limit   : 8192                  // bytes
-                    }
+                    options: imgBaseOptions
                 },
                 {
                     test   : /\.svg$/i,
                     loader : "url-loader",
                     options: {
-                        esModule : false,               // see above
+                        ...imgBaseOptions,
                         generator: content => svgToMiniDataUri(content.toString())
                     }
                 }
@@ -173,6 +180,7 @@ module.exports = (env, argv) => {
         devtool: "cheap-source-map",                    // https://webpack.js.org/configuration/devtool/
         devServer: {
             contentBase       : path.resolve(__dirname, "dist"),
+            watchContentBase  : true,
             historyApiFallback: true
             // proxy doesn't work with Windows-Auth
             //proxy             : {
