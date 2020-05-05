@@ -35,7 +35,7 @@
   "short_name": "Vue Test",
   "orientation": "portrait",
   "display": "standalone",
-  "start_url": "..",
+  "start_url": ".",
   "descriptions": "Playground for Vue's setup with test-frameworks",
   "theme_color": "#007bff",
   "background_color": "#ffffff"
