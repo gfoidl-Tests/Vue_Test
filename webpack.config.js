@@ -43,8 +43,9 @@ module.exports = (env, argv) => {
             plugins: [new TsconfigPathsPlugin({ configFile: tsConfigFile })]
         },
         output: {
-            path    : path.resolve(__dirname, "dist", "assets"),
-            filename: devMode ? "[name].js" : "[name].[hash].js"
+            path      : path.resolve(__dirname, "dist", "assets"),
+            publicPath: "assets/",                      // trailing / is mandatory
+            filename  : devMode ? "[name].js" : "[name].[hash].js"
         },
         module: {
             rules: [
@@ -100,9 +101,8 @@ module.exports = (env, argv) => {
                         {
                             loader : "url-loader",
                             options: {
-                                esModule  : false,      // https://github.com/vuejs/vue-loader/issues/1612    
-                                limit     : 8192,       // bytes
-                                publicPath: "assets/"
+                                esModule: false,        // https://github.com/vuejs/vue-loader/issues/1612
+                                limit   : 8192          // bytes
                             }
                         }
                     ]
@@ -114,7 +114,6 @@ module.exports = (env, argv) => {
                             loader : "url-loader",
                             options: {
                                 esModule  : false,       // see above
-                                publicPath: "assets/",
                                 generator : content => svgToMiniDataUri(content.toString())
                             }
                         }
