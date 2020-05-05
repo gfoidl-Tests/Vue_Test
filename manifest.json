@@ -1,0 +1,42 @@
+{
+  "icons": [
+    {
+      "src": "assets/icons/icon_512x512.ad58f3e332c491aaf54e2db7c373fd2d.png",
+      "sizes": "512x512",
+      "type": "image/png"
+    },
+    {
+      "src": "assets/icons/icon_384x384.29de88823f1b8bbc650168cc35110c9c.png",
+      "sizes": "384x384",
+      "type": "image/png"
+    },
+    {
+      "src": "assets/icons/icon_256x256.979ffee76d20d7ab677f8ab0337b63a5.png",
+      "sizes": "256x256",
+      "type": "image/png"
+    },
+    {
+      "src": "assets/icons/icon_192x192.6646554de756411ddeb177238fe44eae.png",
+      "sizes": "192x192",
+      "type": "image/png"
+    },
+    {
+      "src": "assets/icons/icon_128x128.64f1a3f8a4ee127932d4eceabe6ac891.png",
+      "sizes": "128x128",
+      "type": "image/png"
+    },
+    {
+      "src": "assets/icons/icon_96x96.960504fae193185d434492ee1a37bab9.png",
+      "sizes": "96x96",
+      "type": "image/png"
+    }
+  ],
+  "name": "Vue Test",
+  "short_name": "Vue Test",
+  "orientation": "portrait",
+  "display": "standalone",
+  "start_url": "..",
+  "descriptions": "Playground for Vue's setup with test-frameworks",
+  "theme_color": "#007bff",
+  "background_color": "#ffffff"
+}
