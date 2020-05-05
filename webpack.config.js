@@ -135,8 +135,9 @@ module.exports = (env, argv) => {
         plugins: [
             //gitRevisionPlugin,                        // uncomment to write VERSION and COMMITHASH files to output
             new Webpack.DefinePlugin({
-                __DEBUG__: JSON.stringify(devMode),
-                VERSION  : JSON.stringify(gitRevisionPlugin.version())
+                __DEBUG__     : JSON.stringify(devMode),
+                VERSION       : JSON.stringify(gitRevisionPlugin.version()),
+                BOOTSTRAP_SKIP: false
             }),
             new VueLoaderPlugin(),
             new ForkTsCheckerWebpackPlugin({

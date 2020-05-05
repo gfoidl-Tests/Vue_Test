@@ -79,7 +79,13 @@
 
     import Footer from "@cmp/footer.vue";
     //-------------------------------------------------------------------------
-    setupBootstrap();
+    // Fabalouse hack for testing with jest, otherwise there are some build
+    // failures which seem strange to me...
+    if (BOOTSTRAP_SKIP === undefined || !BOOTSTRAP_SKIP) {
+        setupBootstrap();
+    } else {
+        console.debug("Skipping registration of BootstrapVue PlugIn");
+    }
     //-------------------------------------------------------------------------
     @Component({
         components: {

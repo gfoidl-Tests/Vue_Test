@@ -10,4 +10,6 @@ import "bootstrap-vue/dist/bootstrap-vue.css";
 //-----------------------------------------------------------------------------
 export default function setupBootstrap(): void {
     Vue.use(BootstrapVue);
+
+    console.debug("BootstrapVue registered as PlugIn to Vue");
 }
