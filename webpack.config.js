@@ -11,6 +11,7 @@ const TerserPlugin               = require("terser-webpack-plugin");
 const TsconfigPathsPlugin        = require("tsconfig-paths-webpack-plugin");
 const VueLoaderPlugin            = require("vue-loader/lib/plugin");
 const Webpack                    = require("webpack");
+const WebpackPwaManifest         = require("webpack-pwa-manifest");
 const WorkboxPlugin              = require("workbox-webpack-plugin");
 
 // https://github.com/webpack-contrib/webpack-bundle-analyzer
@@ -167,6 +168,23 @@ module.exports = (env, argv) => {
                     if (/\.gif$/.test(entry)) return "image";
                     return "script";
                 }
+            }),
+            new WebpackPwaManifest({
+                filename        : "../manifest.json",
+                name            : "Vue Test",
+                fingerprints    : !devMode,
+                start_url       : "..",
+                publicPath      : "",
+                descriptions    : "Playground for Vue's setup with test-frameworks",
+                theme_color     : "#007bff",
+                background_color: "#ffffff",
+                icons           : [
+                    {
+                        src        : path.resolve(__dirname, "src", "images", "calculator.png"),
+                        sizes      : [96, 128, 192, 256, 384, 512],
+                        destination: "icons"
+                    }
+                ]
             }),
             new WorkboxPlugin.GenerateSW({
                 swDest                       : "../sw.js",  // for the scope of the site, this should be at the root
