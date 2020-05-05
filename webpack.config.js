@@ -170,12 +170,11 @@ module.exports = (env, argv) => {
                 }
             }),
             new WebpackPwaManifest({
-                filename        : "../manifest.json",
+                filename        : "../manifest.[hash].json",
                 name            : "Vue Test",
                 fingerprints    : !devMode,
-                start_url       : "..",
-                publicPath      : "",
-                descriptions    : "Playground for Vue's setup with test-frameworks",
+                publicPath      : "",                   // leave start_url out, to use default which serves from page-root by .
+                descriptions: "Playground for Vue's setup with test-frameworks",
                 theme_color     : "#007bff",
                 background_color: "#ffffff",
                 icons           : [
