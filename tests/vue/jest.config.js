@@ -1,6 +1,5 @@
 const { pathsToModuleNameMapper } = require("ts-jest/utils");
 const { compilerOptions }         = require("../../tsconfig");
-const path                        = require("path");
 //-----------------------------------------------------------------------------
 module.exports = {
     rootDir             : "../../",
@@ -14,15 +13,17 @@ module.exports = {
     testMatch: [
         "**/tests/vue/**/*.ts"
     ],
-    moduleNameMapper: pathsToModuleNameMapper(compilerOptions.paths, {
-        prefix: "<rootDir>"
-    }),
+    moduleNameMapper: {
+        ...pathsToModuleNameMapper(compilerOptions.paths, { prefix: "<rootDir>" }),
+        "\\.(css|less)$": "<rootDir>/tests/vue/__mocks__/styleMock.js"
+    },
     // helper (above) is used to automate this
     //moduleNameMapper: {
     //    "^@/(.*)$"   : "<rootDir>/src/ts/$1",
     //    "^@svc/(.*)$": "<rootDir>/src/ts/services/$1"
     //},
     globals          : {
-        VERSION: "42"
+        VERSION       : "42",
+        BOOTSTRAP_SKIP: true
     }
 };

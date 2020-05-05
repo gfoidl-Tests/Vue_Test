@@ -5,14 +5,18 @@ const HtmlWebpackPlugIn          = require("html-webpack-plugin");
 const MiniCssExtractPlugIn       = require("mini-css-extract-plugin");
 const OptimizeCssPlugIn          = require("optimize-css-assets-webpack-plugin");
 const path                       = require("path");
+const PreloadWebpackPlugin       = require("preload-webpack-plugin");
 const svgToMiniDataUri           = require("mini-svg-data-uri");
 const TerserPlugin               = require("terser-webpack-plugin");
 const TsconfigPathsPlugin        = require("tsconfig-paths-webpack-plugin");
 const VueLoaderPlugin            = require("vue-loader/lib/plugin");
 const Webpack                    = require("webpack");
+
+// https://github.com/webpack-contrib/webpack-bundle-analyzer
+const BundleAnalyzerPlugIn = require("webpack-bundle-analyzer");
 //-----------------------------------------------------------------------------
 module.exports = (env, argv) => {
-    const devMode = env !== "production" && argv.mode !== "production";
+    const devMode = process.env !== "PRODUCTION" && argv.mode !== "production";
 
     if (devMode) {
         console.log("Development mode");
@@ -22,6 +26,13 @@ module.exports = (env, argv) => {
 
     const tsConfigFile      = path.resolve(__dirname, "src", "tsconfig.json");
     const gitRevisionPlugin = new GitRevisionPlugin();
+
+    const imgBaseOptions = {
+        esModule  : false,                              // https://github.com/vuejs/vue-loader/issues/1612
+        limit     : 8192,                               // bytes
+        name      : devMode ? "[name].[ext]" : "[name].[hash].[ext]",
+        outputPath: "images"
+    };
 
     const config = {
         mode   : devMode ? "development" : "production",
@@ -44,12 +55,15 @@ module.exports = (env, argv) => {
         },
         output: {
             path      : path.resolve(__dirname, "dist", "assets"),
-            publicPath: "assets/",                      // trailing / is mandatory
+            // Don't make it relative to root (i.e. no leading /), so that it can be hosted everywhere (e.g. GH-pages)
+            // Trailing / is mandatory, as the strings are just concatenated instead of handled properly :-(
+            publicPath: "assets/",
             filename  : devMode ? "[name].js" : "[name].[hash].js"
         },
         module: {
             rules: [
                 {
+                    // If there is only one loader no use: [...] is needed
                     test   : /\.ts$/,
                     loader : "ts-loader",
                     exclude: /node_modules/,
@@ -82,50 +96,49 @@ module.exports = (env, argv) => {
                 },
                 // below is for assets -> https://webpack.js.org/guides/asset-management/
                 {
+                    // Several loaders apply, they are processed from the end of the array
                     test: /\.(le|c)ss$/,
                     use : [
                         {
                             loader: MiniCssExtractPlugIn.loader,
                             options: {
-                                esModule: true,         // enables e.g. tree-shaking
-                                hmr     : devMode
+                                esModule  : true,       // enables e.g. tree-shaking
+                                hmr       : devMode,
+                                publicPath: "./"        // CSS-path are relative to the CSS-file location
                             }
                         },
                         "css-loader",
-                        "less-loader"
+                        {
+                            loader : "less-loader",
+                            options: {
+                                lessOptions: {
+                                    strictMath: true    // needed for Bootstrap: https://github.com/twbs/bootstrap/issues/28419
+                                }
+                            }
+                        }
                     ]
                 },
                 {
                     test: /\.(png|jpg|gif)$/i,
-                    use : [
-                        {
-                            loader : "url-loader",
-                            options: {
-                                esModule: false,        // https://github.com/vuejs/vue-loader/issues/1612
-                                limit   : 8192          // bytes
-                            }
-                        }
-                    ]
+                    loader : "url-loader",
+                    options: imgBaseOptions
                 },
                 {
-                    test: /\.svg$/i,
-                    use : [
-                        {
-                            loader : "url-loader",
-                            options: {
-                                esModule  : false,       // see above
-                                generator : content => svgToMiniDataUri(content.toString())
-                            }
-                        }
-                    ]
+                    test   : /\.svg$/i,
+                    loader : "url-loader",
+                    options: {
+                        ...imgBaseOptions,
+                        generator: content => svgToMiniDataUri(content.toString())
+                    }
                 }
             ]
         },
         plugins: [
             //gitRevisionPlugin,                        // uncomment to write VERSION and COMMITHASH files to output
             new Webpack.DefinePlugin({
-                __DEBUG__: JSON.stringify(devMode),
-                VERSION  : JSON.stringify(gitRevisionPlugin.version())
+                __DEBUG__     : JSON.stringify(devMode),
+                VERSION       : JSON.stringify(gitRevisionPlugin.version()),
+                BOOTSTRAP_SKIP: false
             }),
             new VueLoaderPlugin(),
             new ForkTsCheckerWebpackPlugin({
@@ -134,28 +147,53 @@ module.exports = (env, argv) => {
                 memoryLimit: 4096,
                 vue        : true
             }),
+            new MiniCssExtractPlugIn({
+                filename     : devMode ? "[name].css" : "[name].[hash].css",
+                chunkFilename: devMode ? "[id].css"   : "[id].[hash].css"
+            }),
             new HtmlWebpackPlugIn({
                 template: "../index.html",
                 filename: path.resolve(__dirname, "dist", "index.html")
             }),
-            new MiniCssExtractPlugIn({
-                filename     : devMode ? "[name].css" : "[name].[hash].css",
-                chunkFilename: devMode ? "[id].css"   : "[id].[hash].css"
+            new PreloadWebpackPlugin({
+                rel          : "preload",
+                include      : "allAssets",
+                fileWhitelist: [
+                    /loading.*gif/,
+                    /main.*.js$/
+                ],
+                as(entry) {
+                    if (/\.gif$/.test(entry)) return "image";
+                    return "script";
+                }
             })
         ],
         optimization: {
             runtimeChunk: "single",
             splitChunks : {                             // https://webpack.js.org/plugins/split-chunks-plugin/
-                chunks     : "all",
-                cacheGroups: {
-                    app: {
+                chunks     : "all",                     // initial -> needed at entry instantly
+                cacheGroups: {                          // async   -> async imports
+                    app: {                              // all     -> all ;-)
                         name     : "app-common",
-                        chunks   : "initial",
+                        chunks   : "all",
                         minChunks: 2
                     },
                     common: {
-                        test  : /[\\/]node_modules[\\/]/,
-                        name  : "common",
+                        test   : /[\\/]node_modules[\\/]/,
+                        name   : "common",
+                        chunks : "initial",             // with all everything will be included in index.html, so just the minimum to start
+                        maxSize: !devMode ? 500000 : undefined  // dev-server doesn't like it
+                    },
+                    "async-common": {
+                        test    : /[\\/]node_modules[\\/]/,
+                        name    : "async-common",
+                        chunks  : "async",              // with all everything will be included in index.html, so just the minimum to start
+                        maxSize : !devMode ? 500000 : undefined, // dev-server doesn't like it
+                        priority: -10
+                    },
+                    bootstrap: {
+                        test  : /[\\/]node_modules[\\/](bootstrap|popper)/,
+                        name  : "bootstrap",
                         chunks: "all"
                     }
                 }
@@ -168,6 +206,7 @@ module.exports = (env, argv) => {
         devtool: "cheap-source-map",                    // https://webpack.js.org/configuration/devtool/
         devServer: {
             contentBase       : path.resolve(__dirname, "dist"),
+            watchContentBase  : true,
             historyApiFallback: true
             // proxy doesn't work with Windows-Auth
             //proxy             : {
@@ -182,6 +221,12 @@ module.exports = (env, argv) => {
     if (!runsInDevServer) {
         config.plugins.unshift(new CleanWebpackPlugin());
         console.log("added CleanWebpackPlugin");
+    }
+
+    if (process.env.ANALYZE) {
+        const analyzer = new BundleAnalyzerPlugIn.BundleAnalyzerPlugin();
+        config.plugins.push(analyzer);
+        console.log("added BundleAnalyzerPlugin");
     }
 
     return config;

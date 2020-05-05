@@ -1,15 +1,15 @@
 import { mount, createLocalVue, Wrapper } from "@vue/test-utils";
 import BootstrapVue                       from "bootstrap-vue";
-import App                                from "@/app.vue";
+import MainView                           from "@view/main.vue";
 //-----------------------------------------------------------------------------
 describe("App.vue", () => {
-    let sut: Wrapper<App>;
+    let sut: Wrapper<MainView>;
     //-------------------------------------------------------------------------
     beforeEach(() => {
         const localVue = createLocalVue();
         localVue.use(BootstrapVue);
 
-        sut = mount(App, { localVue });
+        sut = mount(MainView, { localVue });
     });
     //-------------------------------------------------------------------------
     afterEach(() => {
@@ -19,7 +19,7 @@ describe("App.vue", () => {
     });
     //-------------------------------------------------------------------------
     test("test wrapper created -> correct name", () => {
-        expect(sut.name()).toBe("App");
+        expect(sut.name()).toBe("MainView");
     });
     //-------------------------------------------------------------------------
     test("no inputs -> calcButton disabled and resultCol not visible", () => {
