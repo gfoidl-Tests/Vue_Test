@@ -157,18 +157,30 @@ module.exports = (env, argv) => {
         optimization: {
             runtimeChunk: "single",
             splitChunks : {                             // https://webpack.js.org/plugins/split-chunks-plugin/
-                chunks     : "all",
-                cacheGroups: {
-                    app: {
+                chunks     : "all",                     // initial -> needed at entry instantly
+                cacheGroups: {                          // async   -> async imports
+                    app: {                              // all     -> all ;-)
                         name     : "app-common",
-                        chunks   : "initial",
+                        chunks   : "all",
                         minChunks: 2
                     },
                     common: {
                         test   : /[\\/]node_modules[\\/]/,
                         name   : "common",
-                        chunks : "all",
+                        chunks : "initial",             // with all everything will be included in index.html, so just the minimum to start
                         maxSize: !devMode ? 500000 : undefined  // dev-server doesn't like it
+                    },
+                    "async-common": {
+                        test    : /[\\/]node_modules[\\/]/,
+                        name    : "async-common",
+                        chunks  : "async",              // with all everything will be included in index.html, so just the minimum to start
+                        maxSize : !devMode ? 500000 : undefined, // dev-server doesn't like it
+                        priority: -10
+                    },
+                    bootstrap: {
+                        test  : /[\\/]node_modules[\\/](bootstrap|popper)/,
+                        name  : "bootstrap",
+                        chunks: "all"
                     }
                 }
             },
