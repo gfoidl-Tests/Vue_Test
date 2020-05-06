@@ -3,7 +3,8 @@ module.exports = {
     launch: {
         devtools: false,
         headless: process.env.HEADLESS !== "false",
-        slowMo  : process.env.SLOWMO
+        slowMo  : process.env.SLOWMO,
+        dumpio  : process.env.DUMPIO
     },
     server: {
         command : "yarn serve dist --no-clipboard --listen 8080",
