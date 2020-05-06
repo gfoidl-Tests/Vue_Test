@@ -1,21 +1,56 @@
 export default class PwaRegistrar {
     public static async run(): Promise<void> {
         window.addEventListener("load", async () => {
-            await PwaRegistrar.registerWorker();
+            const registration = await PwaRegistrar.registerWorker();
+            const permission   = await PwaRegistrar.checkPushNotifications();
+
+            if (registration !== null && permission === "granted") {
+                await navigator.serviceWorker.ready;
+
+                // This notification will be shown in the OS' notification bar
+                // https://developers.google.com/web/fundamentals/push-notifications
+                registration.showNotification("Vue Test", {
+                    icon: "calculator.png",
+                    body: `Started Calculator (Vue Test) at ${new Date().toLocaleString()}`,
+                });
+            }
         });
     }
     //-------------------------------------------------------------------------
-    private static async registerWorker(): Promise<void> {
+    private static async registerWorker(): Promise<ServiceWorkerRegistration | null> {
         if ("serviceWorker" in navigator) {
             try {
                 const registration = await navigator.serviceWorker.register("sw.js");
                 PwaRegistrar.logInfo("sw registered", registration);
+
+                return registration;
             } catch (e) {
                 PwaRegistrar.logError("registration failed", e);
             }
         } else {
             PwaRegistrar.logInfo("not supported");
         }
+
+        return null;
+    }
+    //-------------------------------------------------------------------------
+    private static async checkPushNotifications(): Promise<NotificationPermission | null> {
+        if ("PushManager" in window) {
+            PwaRegistrar.logInfo("push notifications supported");
+
+            try {
+                const permission = await window.Notification.requestPermission();
+                PwaRegistrar.logInfo("requested permission", permission);
+
+                return permission;
+            } catch (e) {
+                PwaRegistrar.logError("request permission failed", e);
+            }
+        } else {
+            PwaRegistrar.logInfo("push notifications not supported");
+        }
+
+        return null;
     }
     //-------------------------------------------------------------------------
     private static logInfo(message: string, ...additionalParameters: any[]): void {
