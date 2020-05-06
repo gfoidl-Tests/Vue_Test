@@ -17,6 +17,12 @@ export default class Helper {
             && boxModel.height === 0;
     }
     //-------------------------------------------------------------------------
+    public static sleep(ms: number): Promise<void> {
+        return new Promise<void>(res => {
+            setTimeout(() => res(), ms);
+        });
+    }
+    //-------------------------------------------------------------------------
     private static ensureDirExists(): void {
         if (!fs.existsSync(Helper.s_screenShotDir)) {
             fs.mkdirSync(Helper.s_screenShotDir);
