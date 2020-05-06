@@ -1,5 +1,6 @@
-import Vue from "vue";
-import App from "@/app.vue";
+import Vue          from "vue";
+import App          from "@/app.vue";
+import PwaRegistrar from "./pwa-registrar";
 //-----------------------------------------------------------------------------
 Vue.config.productionTip = false;
 //-----------------------------------------------------------------------------
@@ -29,13 +30,4 @@ const app = new Vue({
 //    render: r => r(App)
 //}).$mount("app");
 //-----------------------------------------------------------------------------
-if ("serviceWorker" in navigator) {
-    window.addEventListener("load", async () => {
-        try {
-            const registration = await navigator.serviceWorker.register("sw.js");
-            console.info("SW registered: ", registration);
-        } catch (e) {
-            console.error("SW registration failed: ", e);
-        }
-    });
-}
+PwaRegistrar.run();

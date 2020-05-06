@@ -41,7 +41,7 @@ describe("Service Worker", () => {
         let hasMatch = false;
 
         for (const msg of messages) {
-            if (msg.match(/SW registered/)) {
+            if (msg.match(/sw registered/)) {
                 hasMatch = true;
                 break;
             }
