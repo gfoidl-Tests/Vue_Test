@@ -26,7 +26,7 @@ module.exports = (env, argv) => {
         console.log("Production mode");
     }
 
-    const tsConfigFile      = path.resolve(__dirname, "src", "tsconfig.json");
+    const tsConfigFile      = path.resolve(__dirname, "src", "ts", "tsconfig.json");
     const gitRevisionPlugin = new GitRevisionPlugin();
 
     const imgBaseOptions = {
@@ -185,11 +185,19 @@ module.exports = (env, argv) => {
                     }
                 ]
             }),
-            new WorkboxPlugin.GenerateSW({
+            //new WorkboxPlugin.GenerateSW({
+            //    swDest                       : "../sw.js",  // for the scope of the site, this should be at the root
+            //    clientsClaim                 : true,
+            //    skipWaiting                  : true,
+            //    cleanupOutdatedCaches        : true,
+            //    maximumFileSizeToCacheInBytes: 4 * 1024 * 1024
+            //})
+            // This plugin injects the workbox code into a template given by `swSrc`.
+            // More setup cost, but more possibilities.
+            // With GenerateSW the file given with `swSrc` isn't needed. All is done by workbox.
+            new WorkboxPlugin.InjectManifest({
+                swSrc: path.resolve(__dirname, "src", "ts", "service-worker.ts"),
                 swDest                       : "../sw.js",  // for the scope of the site, this should be at the root
-                clientsClaim                 : true,
-                skipWaiting                  : true,
-                cleanupOutdatedCaches        : true,
                 maximumFileSizeToCacheInBytes: 4 * 1024 * 1024
             })
         ],
