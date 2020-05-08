@@ -142,6 +142,7 @@ module.exports = (env, argv) => {
                 VERSION       : JSON.stringify(gitRevisionPlugin.version()),
                 BOOTSTRAP_SKIP: false
             }),
+            new Webpack.HashedModuleIdsPlugin(),
             new VueLoaderPlugin(),
             new ForkTsCheckerWebpackPlugin({
                 tsconfig   : tsConfigFile,
