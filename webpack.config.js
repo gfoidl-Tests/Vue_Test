@@ -32,7 +32,7 @@ module.exports = (env, argv) => {
     const imgBaseOptions = {
         esModule  : false,                              // https://github.com/vuejs/vue-loader/issues/1612
         limit     : 8192,                               // bytes
-        name      : devMode ? "[name].[ext]" : "[name].[hash].[ext]",
+        name      : devMode ? "[name].[ext]" : "[name].[hash:8].[ext]",
         outputPath: "images"
     };
 
@@ -60,7 +60,7 @@ module.exports = (env, argv) => {
             // Don't make it relative to root (i.e. no leading /), so that it can be hosted everywhere (e.g. GH-pages)
             // Trailing / is mandatory, as the strings are just concatenated instead of handled properly :-(
             publicPath: "assets/",
-            filename  : devMode ? "[name].js" : "[name].[contenthash].js"
+            filename  : devMode ? "[name].js" : "[name].[contenthash:8].js"
         },
         module: {
             rules: [
@@ -150,8 +150,8 @@ module.exports = (env, argv) => {
                 vue        : true
             }),
             new MiniCssExtractPlugIn({
-                filename     : devMode ? "[name].css" : "[name].[contenthash].css",
-                chunkFilename: devMode ? "[id].css"   : "[id].[contenthash].css"
+                filename     : devMode ? "[name].css" : "[name].[contenthash:8].css",
+                chunkFilename: devMode ? "[id].css"   : "[id].[contenthash:8].css"
             }),
             new HtmlWebpackPlugIn({
                 template: "../index.html",
@@ -170,7 +170,7 @@ module.exports = (env, argv) => {
                 }
             }),
             new WebpackPwaManifest({
-                filename        : "../manifest.[hash].json",
+                filename        : "../manifest.[hash:8].json",
                 name            : "Vue Test",
                 fingerprints    : !devMode,
                 publicPath      : "",                   // leave start_url out, to use default which serves from page-root by .
