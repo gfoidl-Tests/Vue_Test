@@ -1,9 +1,9 @@
 const { CleanWebpackPlugin }     = require("clean-webpack-plugin");
 const ForkTsCheckerWebpackPlugin = require("fork-ts-checker-webpack-plugin");
 const GitRevisionPlugin          = require("git-revision-webpack-plugin");
-const HtmlWebpackPlugIn          = require("html-webpack-plugin");
-const MiniCssExtractPlugIn       = require("mini-css-extract-plugin");
-const OptimizeCssPlugIn          = require("optimize-css-assets-webpack-plugin");
+const HtmlWebpackPlugin          = require("html-webpack-plugin");
+const MiniCssExtractPlugin       = require("mini-css-extract-plugin");
+const OptimizeCssPlugin          = require("optimize-css-assets-webpack-plugin");
 const path                       = require("path");
 const PreloadWebpackPlugin       = require("preload-webpack-plugin");
 const svgToMiniDataUri           = require("mini-svg-data-uri");
@@ -15,7 +15,7 @@ const WebpackPwaManifest         = require("webpack-pwa-manifest");
 const WorkboxPlugin              = require("workbox-webpack-plugin");
 
 // https://github.com/webpack-contrib/webpack-bundle-analyzer
-const BundleAnalyzerPlugIn = require("webpack-bundle-analyzer");
+const BundleAnalyzerPlugin = require("webpack-bundle-analyzer");
 //-----------------------------------------------------------------------------
 module.exports = (env, argv) => {
     const devMode = process.env !== "PRODUCTION" && argv.mode !== "production";
@@ -32,7 +32,7 @@ module.exports = (env, argv) => {
     const imgBaseOptions = {
         esModule  : false,                              // https://github.com/vuejs/vue-loader/issues/1612
         limit     : 8192,                               // bytes
-        name      : devMode ? "[name].[ext]" : "[name].[hash].[ext]",
+        name      : devMode ? "[name].[ext]" : "[name].[hash:8].[ext]",
         outputPath: "images"
     };
 
@@ -60,7 +60,7 @@ module.exports = (env, argv) => {
             // Don't make it relative to root (i.e. no leading /), so that it can be hosted everywhere (e.g. GH-pages)
             // Trailing / is mandatory, as the strings are just concatenated instead of handled properly :-(
             publicPath: "assets/",
-            filename  : devMode ? "[name].js" : "[name].[hash].js"
+            filename  : devMode ? "[name].js" : "[name].[contenthash:8].js"
         },
         module: {
             rules: [
@@ -102,7 +102,7 @@ module.exports = (env, argv) => {
                     test: /\.(le|c)ss$/,
                     use : [
                         {
-                            loader: MiniCssExtractPlugIn.loader,
+                            loader: MiniCssExtractPlugin.loader,
                             options: {
                                 esModule  : true,       // enables e.g. tree-shaking
                                 hmr       : devMode,
@@ -142,6 +142,7 @@ module.exports = (env, argv) => {
                 VERSION       : JSON.stringify(gitRevisionPlugin.version()),
                 BOOTSTRAP_SKIP: false
             }),
+            new Webpack.HashedModuleIdsPlugin(),
             new VueLoaderPlugin(),
             new ForkTsCheckerWebpackPlugin({
                 tsconfig   : tsConfigFile,
@@ -149,11 +150,11 @@ module.exports = (env, argv) => {
                 memoryLimit: 4096,
                 vue        : true
             }),
-            new MiniCssExtractPlugIn({
-                filename     : devMode ? "[name].css" : "[name].[hash].css",
-                chunkFilename: devMode ? "[id].css"   : "[id].[hash].css"
+            new MiniCssExtractPlugin({
+                filename     : devMode ? "[name].css" : "[name].[contenthash:8].css",
+                chunkFilename: devMode ? "[id].css"   : "[id].[contenthash:8].css"
             }),
-            new HtmlWebpackPlugIn({
+            new HtmlWebpackPlugin({
                 template: "../index.html",
                 filename: path.resolve(__dirname, "dist", "index.html")
             }),
@@ -170,11 +171,11 @@ module.exports = (env, argv) => {
                 }
             }),
             new WebpackPwaManifest({
-                filename        : "../manifest.[hash].json",
+                filename        : "../manifest.[hash:8].json",
                 name            : "Vue Test",
                 fingerprints    : !devMode,
                 publicPath      : "",                   // leave start_url out, to use default which serves from page-root by .
-                descriptions: "Playground for Vue's setup with test-frameworks",
+                descriptions    : "Playground for Vue's setup with test-frameworks",
                 theme_color     : "#007bff",
                 background_color: "#ffffff",
                 icons           : [
@@ -233,7 +234,7 @@ module.exports = (env, argv) => {
             },
             minimizer: [
                 new TerserPlugin({}),
-                new OptimizeCssPlugIn({})
+                new OptimizeCssPlugin({})
             ]
         },
         devtool: "cheap-source-map",                    // https://webpack.js.org/configuration/devtool/
@@ -257,7 +258,7 @@ module.exports = (env, argv) => {
     }
 
     if (process.env.ANALYZE) {
-        const analyzer = new BundleAnalyzerPlugIn.BundleAnalyzerPlugin();
+        const analyzer = new BundleAnalyzerPlugin.BundleAnalyzerPlugin();
         config.plugins.push(analyzer);
         console.log("added BundleAnalyzerPlugin");
     }
