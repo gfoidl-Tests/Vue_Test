@@ -60,7 +60,7 @@ module.exports = (env, argv) => {
             // Don't make it relative to root (i.e. no leading /), so that it can be hosted everywhere (e.g. GH-pages)
             // Trailing / is mandatory, as the strings are just concatenated instead of handled properly :-(
             publicPath: "assets/",
-            filename  : devMode ? "[name].js" : "[name].[hash].js"
+            filename  : devMode ? "[name].js" : "[name].[contenthash].js"
         },
         module: {
             rules: [
@@ -150,8 +150,8 @@ module.exports = (env, argv) => {
                 vue        : true
             }),
             new MiniCssExtractPlugIn({
-                filename     : devMode ? "[name].css" : "[name].[hash].css",
-                chunkFilename: devMode ? "[id].css"   : "[id].[hash].css"
+                filename     : devMode ? "[name].css" : "[name].[contenthash].css",
+                chunkFilename: devMode ? "[id].css"   : "[id].[contenthash].css"
             }),
             new HtmlWebpackPlugIn({
                 template: "../index.html",
@@ -174,7 +174,7 @@ module.exports = (env, argv) => {
                 name            : "Vue Test",
                 fingerprints    : !devMode,
                 publicPath      : "",                   // leave start_url out, to use default which serves from page-root by .
-                descriptions: "Playground for Vue's setup with test-frameworks",
+                descriptions    : "Playground for Vue's setup with test-frameworks",
                 theme_color     : "#007bff",
                 background_color: "#ffffff",
                 icons           : [
