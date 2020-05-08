@@ -1,9 +1,9 @@
 const { CleanWebpackPlugin }     = require("clean-webpack-plugin");
 const ForkTsCheckerWebpackPlugin = require("fork-ts-checker-webpack-plugin");
 const GitRevisionPlugin          = require("git-revision-webpack-plugin");
-const HtmlWebpackPlugIn          = require("html-webpack-plugin");
-const MiniCssExtractPlugIn       = require("mini-css-extract-plugin");
-const OptimizeCssPlugIn          = require("optimize-css-assets-webpack-plugin");
+const HtmlWebpackPlugin          = require("html-webpack-plugin");
+const MiniCssExtractPlugin       = require("mini-css-extract-plugin");
+const OptimizeCssPlugin          = require("optimize-css-assets-webpack-plugin");
 const path                       = require("path");
 const PreloadWebpackPlugin       = require("preload-webpack-plugin");
 const svgToMiniDataUri           = require("mini-svg-data-uri");
@@ -15,7 +15,7 @@ const WebpackPwaManifest         = require("webpack-pwa-manifest");
 const WorkboxPlugin              = require("workbox-webpack-plugin");
 
 // https://github.com/webpack-contrib/webpack-bundle-analyzer
-const BundleAnalyzerPlugIn = require("webpack-bundle-analyzer");
+const BundleAnalyzerPlugin = require("webpack-bundle-analyzer");
 //-----------------------------------------------------------------------------
 module.exports = (env, argv) => {
     const devMode = process.env !== "PRODUCTION" && argv.mode !== "production";
@@ -102,7 +102,7 @@ module.exports = (env, argv) => {
                     test: /\.(le|c)ss$/,
                     use : [
                         {
-                            loader: MiniCssExtractPlugIn.loader,
+                            loader: MiniCssExtractPlugin.loader,
                             options: {
                                 esModule  : true,       // enables e.g. tree-shaking
                                 hmr       : devMode,
@@ -149,11 +149,11 @@ module.exports = (env, argv) => {
                 memoryLimit: 4096,
                 vue        : true
             }),
-            new MiniCssExtractPlugIn({
+            new MiniCssExtractPlugin({
                 filename     : devMode ? "[name].css" : "[name].[contenthash:8].css",
                 chunkFilename: devMode ? "[id].css"   : "[id].[contenthash:8].css"
             }),
-            new HtmlWebpackPlugIn({
+            new HtmlWebpackPlugin({
                 template: "../index.html",
                 filename: path.resolve(__dirname, "dist", "index.html")
             }),
@@ -233,7 +233,7 @@ module.exports = (env, argv) => {
             },
             minimizer: [
                 new TerserPlugin({}),
-                new OptimizeCssPlugIn({})
+                new OptimizeCssPlugin({})
             ]
         },
         devtool: "cheap-source-map",                    // https://webpack.js.org/configuration/devtool/
@@ -257,7 +257,7 @@ module.exports = (env, argv) => {
     }
 
     if (process.env.ANALYZE) {
-        const analyzer = new BundleAnalyzerPlugIn.BundleAnalyzerPlugin();
+        const analyzer = new BundleAnalyzerPlugin.BundleAnalyzerPlugin();
         config.plugins.push(analyzer);
         console.log("added BundleAnalyzerPlugin");
     }
