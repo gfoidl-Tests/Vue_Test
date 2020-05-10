@@ -1,6 +1,10 @@
 import { skipWaiting, clientsClaim }               from "workbox-core";
 import { cleanupOutdatedCaches, precacheAndRoute } from "workbox-precaching";
 //-----------------------------------------------------------------------------
+// Hint what `self` actually is.
+declare const self: ServiceWorkerGlobalScope;
+//export { };       // here not needed, as the imports make it already a module
+//-----------------------------------------------------------------------------
 // https://developers.google.com/web/fundamentals/primers/service-workers/lifecycle
 skipWaiting();
 clientsClaim();
