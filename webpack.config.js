@@ -185,22 +185,9 @@ module.exports = (env, argv) => {
                         destination: "icons"
                     }
                 ]
-            }),
-            //new WorkboxPlugin.GenerateSW({
-            //    swDest                       : "../sw.js",  // for the scope of the site, this should be at the root
-            //    clientsClaim                 : true,
-            //    skipWaiting                  : true,
-            //    cleanupOutdatedCaches        : true,
-            //    maximumFileSizeToCacheInBytes: 4 * 1024 * 1024
-            //})
-            // This plugin injects the workbox code into a template given by `swSrc`.
-            // More setup cost, but more possibilities.
-            // With GenerateSW the file given with `swSrc` isn't needed. All is done by workbox.
-            new WorkboxPlugin.InjectManifest({
-                swSrc: path.resolve(__dirname, "src", "ts", "service-worker.ts"),
-                swDest                       : "../sw.js",  // for the scope of the site, this should be at the root
-                maximumFileSizeToCacheInBytes: 4 * 1024 * 1024
             })
+            // workbox doesn't play nice with watch-mode, so inject these plugins separate (see below)
+            // See also https://github.com/GoogleChrome/workbox/issues/1790
         ],
         optimization: {
             runtimeChunk: "single",
@@ -248,6 +235,29 @@ module.exports = (env, argv) => {
             //}
         }
     };
+
+    // Due workbox not playing nice with watch-mode, inject these plugins here
+    // when not in watch-mode (also see comment above in the plugins).
+    if (!argv.watch) {
+        const workboxPlugin =
+            //new WorkboxPlugin.GenerateSW({
+            //    swDest                       : "../sw.js",  // for the scope of the site, this should be at the root
+            //    clientsClaim                 : true,
+            //    skipWaiting                  : true,
+            //    cleanupOutdatedCaches        : true,
+            //    maximumFileSizeToCacheInBytes: 4 * 1024 * 1024
+            //});
+            // This plugin injects the workbox code into a template given by `swSrc`.
+            // More setup cost, but more possibilities.
+            // With GenerateSW the file given with `swSrc` isn't needed. All is done by workbox.
+            new WorkboxPlugin.InjectManifest({
+                swSrc                        : path.resolve(__dirname, "src", "ts", "service-worker.ts"),
+                swDest                       : "../sw.js",  // for the scope of the site, this should be at the root
+                maximumFileSizeToCacheInBytes: 4 * 1024 * 1024
+            });
+
+        config.plugins.push(workboxPlugin);
+    }
 
     // Inject CleanWebpackPlugin when not using dev-server. With the dev-server
     // there is a deadlock anywhere :-(
