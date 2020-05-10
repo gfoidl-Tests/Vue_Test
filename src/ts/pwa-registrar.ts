@@ -14,6 +14,12 @@ export default class PwaRegistrar {
                     body: `Started Calculator (Vue Test) at ${new Date().toLocaleString()}`,
                 });
             }
+
+            // Handler for "worker" messages. Keep in mind that a service worker is
+            // based on normal workers.
+            navigator.serviceWorker.addEventListener("message", event => {
+                console.dir(event.data);
+            });
         });
     }
     //-------------------------------------------------------------------------
