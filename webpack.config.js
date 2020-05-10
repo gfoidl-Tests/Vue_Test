@@ -139,9 +139,10 @@ module.exports = (env, argv) => {
         plugins: [
             //gitRevisionPlugin,                        // uncomment to write VERSION and COMMITHASH files to output
             new Webpack.DefinePlugin({
-                __DEBUG__        : JSON.stringify(devMode),
-                __VERSION__      : JSON.stringify(gitRevisionPlugin.version()),
-                __RUN_FROM_TEST__: false
+                __DEBUG__              : JSON.stringify(devMode),
+                __VERSION__            : JSON.stringify(gitRevisionPlugin.version()),
+                __RUN_FROM_TEST__      : false,
+                PUSH_MESSAGE_SERVER_KEY: JSON.stringify(process.env.PUSH_MESSAGE_SERVER_KEY)    // https://web-push-codelab.glitch.me/
             }),
             new Webpack.HashedModuleIdsPlugin(),
             new VueLoaderPlugin(),

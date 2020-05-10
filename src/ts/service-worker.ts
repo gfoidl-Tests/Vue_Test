@@ -83,6 +83,7 @@ async function handlePush(event: PushEvent): Promise<void> {
     await self.registration.showNotification("Vue Test", {
         icon   : "calculator.png",
         body   : event.data?.text(),
+        vibrate: [100, 50, 100],
         actions: [
             {
                 action: "open",

@@ -1,18 +1,39 @@
+import * as firebase from "./firebase";
+//-----------------------------------------------------------------------------
 export default class PwaRegistrar {
-    public static async run(): Promise<void> {
+    public static async run(showNotificationOnStartup = false): Promise<void> {
         window.addEventListener("load", async () => {
             const registration = await PwaRegistrar.registerWorker();
             const permission   = await PwaRegistrar.checkPushNotifications();
 
             if (registration !== null && permission === "granted") {
-                await navigator.serviceWorker.ready;
+                if (firebase.fireBaseConfig.serverKey) {
+                    const pushSubscription = await registration.pushManager.subscribe({
+                        userVisibleOnly: true,
+                        applicationServerKey: firebase.urlB64ToUint8Array(firebase.fireBaseConfig.serverKey)
+                    });
+                    PwaRegistrar.logInfo("subscription: ", JSON.parse(JSON.stringify(pushSubscription)));
 
-                // This notification will be shown in the OS' notification bar
-                // https://developers.google.com/web/fundamentals/push-notifications
-                registration.showNotification("Vue Test", {
-                    icon: "calculator.png",
-                    body: `Started Calculator (Vue Test) at ${new Date().toLocaleString()}`,
-                });
+                    // Poor-man show subscription info on the client
+                    // Normally this info would be sent to the server, which later can call
+                    // the messenging service. Here it's just for demo.
+                    const div     = document.createElement("pre");
+                    div.innerText = JSON.stringify(pushSubscription);
+                    document.getElementsByTagName("footer")[0].appendChild(div);
+                } else {
+                    PwaRegistrar.logError("Build must be done with server key, i.e. ", "PUSH_MESSAGE_SERVER_KEY=<public key> yarn build", "https://web-push-codelab.glitch.me/");
+                }
+                
+                if (showNotificationOnStartup) {
+                    await navigator.serviceWorker.ready;
+
+                    // This notification will be shown in the OS' notification bar
+                    // https://developers.google.com/web/fundamentals/push-notifications
+                    registration.showNotification("Vue Test", {
+                        icon: "calculator.png",
+                        body: `Started Calculator (Vue Test) at ${new Date().toLocaleString()}`,
+                    });
+                }
             }
 
             // Handler for "worker" messages. Keep in mind that a service worker is
@@ -67,7 +88,11 @@ export default class PwaRegistrar {
         PwaRegistrar.logCore("error", message, ...additionalParameters);
     }
     //-------------------------------------------------------------------------
-    private static logCore(method: "info" | "error", message: string, ...additionalParameters: object[]): void {
+    private static logDebug(message: string, ...additionalParameters: any[]): void {
+        PwaRegistrar.logCore("debug", message, ...additionalParameters);
+    }
+    //-------------------------------------------------------------------------
+    private static logCore(method: "info" | "error" | "debug", message: string, ...additionalParameters: object[]): void {
         // JS objects are "dictionaries"
         console[method]("%c[SW] ", `
             margin          : 1px;
