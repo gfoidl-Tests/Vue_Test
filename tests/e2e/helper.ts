@@ -1,13 +1,13 @@
-import * as fs           from "fs";
-import * as path         from "path";
-import { ElementHandle } from "puppeteer";
+import * as fs                 from "fs";
+import * as path               from "path";
+import { ElementHandle, Page } from "puppeteer";
 //-----------------------------------------------------------------------------
 export default class Helper {
     static readonly s_screenShotDir = "screenshots";
     //-------------------------------------------------------------------------
-    public static async takeScreenshot(name: string): Promise<void> {
+    public static async takeScreenshot(name: string, pageForScreenshot: Page = page): Promise<void> {
         Helper.ensureDirExists();
-        await page.screenshot({ path: path.resolve(Helper.s_screenShotDir, name) });
+        await pageForScreenshot.screenshot({ path: path.resolve(Helper.s_screenShotDir, name) });
     }
     //-------------------------------------------------------------------------
     public static async isVisible(element: ElementHandle<Element>) {
@@ -15,6 +15,33 @@ export default class Helper {
 
         return boxModel?.width === 0
             && boxModel.height === 0;
+    }
+    //-------------------------------------------------------------------------
+    public static async checkCountOfInputStore(pageToEvaluate: Page): Promise<number> {
+        return pageToEvaluate.evaluate(() => {
+            return new Promise((resolve, reject) => {
+                const openRequest = window.indexedDB.open("calc");
+
+                // Note: not => as this would capture this
+                openRequest.onsuccess = function () {
+                    const db            = this.result;
+                    const transaction   = db.transaction("input", "readonly");
+                    transaction.onerror = function () { reject(this.error); }
+
+                    const store            = transaction.objectStore("input");
+                    const countRequest     = store.count();
+                    countRequest.onsuccess = function () {
+                        const count = this.result;
+                        resolve(count);
+                    }
+                }
+
+                openRequest.onerror = function () {
+                    console.error("error opening db", this.error);
+                    reject(this.error);
+                }
+            });
+        }) as Promise<number>;
     }
     //-------------------------------------------------------------------------
     public static sleep(ms: number): Promise<void> {

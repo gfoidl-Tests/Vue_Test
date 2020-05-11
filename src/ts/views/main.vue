@@ -76,6 +76,7 @@
 <script lang="ts">
     import { Vue, Component } from "vue-property-decorator";
     import setupBootstrap     from "@/setup-bootstrap";
+    import { Input }          from "./input";
     import * as calc          from "@svc/calculator";
     import * as idb           from "idb-keyval";
 
@@ -195,11 +196,5 @@
             return typeof val === "number"
                 && val !== null;
         }
-    }
-    //-------------------------------------------------------------------------
-    interface Input {
-        a        : calc.NullableNumber,
-        b        : calc.NullableNumber,
-        operation: string,
     }
 </script>
