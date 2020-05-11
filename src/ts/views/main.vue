@@ -77,6 +77,7 @@
     import { Vue, Component } from "vue-property-decorator";
     import setupBootstrap     from "@/setup-bootstrap";
     import * as calc          from "@svc/calculator";
+    import * as idb           from "idb-keyval";
 
     import Footer    from "@cmp/footer.vue";
     import OnOffline from "@cmp/on-offline.vue";
@@ -97,6 +98,8 @@
     })
     export default class MainView extends Vue {
         private operation: calc.Operation;
+        private store    : idb.Store | null;
+        //---------------------------------------------------------------------
         public input     : Input;
         public result    : calc.NullableNumber = null;
         public message = "";
@@ -119,12 +122,38 @@
             };
 
             this.operation = calc.toOperation(this.input.operation);
+
+            if ("indexedDB" in window) {
+                const db    = "calc";
+                const store = "input";
+                this.store  = new idb.Store("calc", "input");
+                console.debug(`IndexedDB store-object with db ${db} and store ${store} created`);
+            } else {
+                this.store = null;
+                console.debug("This browser doesn't support IndexedDB");
+            }
         }
         //---------------------------------------------------------------------
-        public calculate(): void {
+        private async mounted(): Promise<void> {
+            if (this.store) {
+                const storedInput = await idb.get<Input>("calc", this.store);
+
+                if (storedInput) {
+                    this.input = storedInput;
+                    console.debug("loaded stored calc from IndexedDB");
+                }
+            }
+        }
+        //---------------------------------------------------------------------
+        public async calculate(): Promise<void> {
             this.operation = calc.toOperation(this.input.operation);
 
             //console.log(JSON.stringify(this.input));
+
+            if (this.store) {
+                await idb.set("calc", this.input, this.store);
+                console.debug("stored current calc to IndexedDB");
+            }
 
             try {
                 this.result  = calc.Calculator.calculate(this.operation, this.input.a, this.input.b);
@@ -139,7 +168,7 @@
             }
         }
         //---------------------------------------------------------------------
-        public reset(): void {
+        public async reset(): Promise<void> {
             this.input = {
                 a        : null,
                 b        : null,
@@ -148,6 +177,10 @@
 
             this.result  = null;
             this.message = "";
+
+            if (this.store) {
+                await idb.del("calc", this.store);
+            }
         }
         //---------------------------------------------------------------------
         get canCalc(): boolean {
