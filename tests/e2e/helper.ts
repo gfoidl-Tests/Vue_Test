@@ -5,9 +5,11 @@ import { ElementHandle } from "puppeteer";
 export default class Helper {
     static readonly s_screenShotDir = "screenshots";
     //-------------------------------------------------------------------------
-    public static async takeScreenshot(name: string): Promise<void> {
-        Helper.ensureDirExists();
-        await page.screenshot({ path: path.resolve(Helper.s_screenShotDir, name) });
+    public static async takeScreenshot(name: string, outputDir?: string): Promise<void> {
+        outputDir = outputDir ?? this.s_screenShotDir;
+
+        Helper.ensureDirExists(outputDir);
+        await page.screenshot({ path: path.resolve(outputDir, name) });
     }
     //-------------------------------------------------------------------------
     public static async isVisible(element: ElementHandle<Element>) {
@@ -23,9 +25,9 @@ export default class Helper {
         });
     }
     //-------------------------------------------------------------------------
-    private static ensureDirExists(): void {
-        if (!fs.existsSync(Helper.s_screenShotDir)) {
-            fs.mkdirSync(Helper.s_screenShotDir);
+    private static ensureDirExists(outputDir: string): void {
+        if (!fs.existsSync(outputDir)) {
+            fs.mkdirSync(outputDir);
         }
     }
 }

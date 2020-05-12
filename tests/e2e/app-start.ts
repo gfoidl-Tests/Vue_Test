@@ -1,4 +1,5 @@
-import Helper from "./helper";
+import Helper      from "./helper";
+import { devices } from "puppeteer";
 //-----------------------------------------------------------------------------
 describe("App Start", () => {
     const baseUrl = "http://localhost:8080";
@@ -41,5 +42,16 @@ describe("App Start", () => {
 
         // reset viewport to previous value
         await page.setViewport(viewPort);
+    });
+    //-------------------------------------------------------------------------
+    test("emulate devices", async () => {
+        try {
+            for (const device of devices) {
+                await page.emulate(device);
+                await Helper.takeScreenshot(`${device.name}.png`, "screenshots/devices");
+            }
+        } finally {
+            await jestPuppeteer.resetPage();
+        }
     });
 });
