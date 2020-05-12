@@ -236,9 +236,17 @@ module.exports = (env, argv) => {
         }
     };
 
+    // Inject CleanWebpackPlugin when not using dev-server. With the dev-server
+    // there is a deadlock anywhere :-(
+    const runsInDevServer = /webpack-dev-server.js$/.test(argv.$0);
+    if (!runsInDevServer) {
+        config.plugins.unshift(new CleanWebpackPlugin());
+        console.log("added CleanWebpackPlugin");
+    }
+
     // Due workbox not playing nice with watch-mode, inject these plugins here
     // when not in watch-mode (also see comment above in the plugins).
-    if (!argv.watch) {
+    if (!argv.watch && !runsInDevServer) {
         const workboxPlugin =
             //new WorkboxPlugin.GenerateSW({
             //    swDest                       : "../sw.js",  // for the scope of the site, this should be at the root
@@ -257,14 +265,6 @@ module.exports = (env, argv) => {
             });
 
         config.plugins.push(workboxPlugin);
-    }
-
-    // Inject CleanWebpackPlugin when not using dev-server. With the dev-server
-    // there is a deadlock anywhere :-(
-    const runsInDevServer = /webpack-dev-server.js$/.test(argv.$0);
-    if (!runsInDevServer) {
-        config.plugins.unshift(new CleanWebpackPlugin());
-        console.log("added CleanWebpackPlugin");
     }
 
     if (process.env.ANALYZE) {
