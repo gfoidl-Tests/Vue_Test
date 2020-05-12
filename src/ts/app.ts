@@ -30,4 +30,4 @@ const app = new Vue({
 //    render: r => r(App)
 //}).$mount("app");
 //-----------------------------------------------------------------------------
-PwaRegistrar.run();
+//PwaRegistrar.run();
