@@ -1,65 +1,62 @@
 // In headless mode service worker are disabled by default. So startup the
 // browser manually and not via jest-puppeteer.
 //-----------------------------------------------------------------------------
-import * as puppeteer from "puppeteer";
+import Helper from "./helper";
 //-----------------------------------------------------------------------------
 describe("Service Worker", () => {
     const baseUrl = "http://localhost:8080/";
-    let browser   : puppeteer.Browser;
-    let myPage    : puppeteer.Page;
-    const messages: string[] = [];
     //-------------------------------------------------------------------------
-    beforeAll(async () => {
-        browser = await puppeteer.launch({
-            args             : ["--enable-features=NetworkService"],
-            headless         : true,
-            //headless         : false,
-            //slowMo           : 250,
-            ignoreHTTPSErrors: true
-        });
-
-        myPage = await browser.newPage();
-
-        myPage.on("console", msg => {
-            const text = msg.text();
-            console.log("[PAGE LOG] ", text);
-            messages.push(text);
-        });
-
-        await myPage.goto(baseUrl);
+    beforeEach(async () => {
+        await page.goto(baseUrl);
 
         // Let the service worker work
-        await myPage.waitFor(1000);
+        await page.waitFor(1000);
     });
     //-------------------------------------------------------------------------
-    afterAll(async () => {
-        await myPage .close();
-        await browser.close();
+    afterEach(async () => {
+        // Clean the page, so that the eval-script from the test won't infer
+        // with other tests.
+        await jestPuppeteer.resetPage();
     });
     //-------------------------------------------------------------------------
-    test("console log has note about SW registration", () => {
-        let hasMatch = false;
+    test("service worker is running", async () => {
+        // This won't work as the evaluate script must be JS, not TypeScript
+        //const swState = await page.evaluate(async () => {
+        //    const registration = await window.navigator.serviceWorker.getRegistration();
+        //    const activeWorker = registration?.active;
+        //    return activeWorker?.state;
+        //});
+        const swState = await page.evaluate(() => {
+            return new Promise((resolve, reject) => {
+                window.navigator.serviceWorker.getRegistration()
+                    .then(registration => {
+                        if (!registration) {
+                            reject("no sw-registration found");
+                        }
 
-        for (const msg of messages) {
-            if (msg.match(/sw registered/)) {
-                hasMatch = true;
-                break;
-            }
-        }
+                        const activeWorker = registration?.active;
+                        resolve(activeWorker?.state);
+                    });
+            });
+        });
 
-        expect(hasMatch).toBe(true);
+        const expectedState: ServiceWorkerState = "activated";
+        expect(swState).toBe(expectedState)
     });
     //-------------------------------------------------------------------------
     test("browser goes offline, page reload -> OK", async () => {
-        expect(myPage.url()).toBe(baseUrl);
+        expect(page.url()).toBe(baseUrl);
 
         try {
-            await myPage.setOfflineMode(true);
-            await myPage.reload();
+            await page.setOfflineMode(true);
+            await page.reload();
 
-            expect(myPage.url()).toBe(baseUrl);
+            await Helper.takeScreenshot("offline.png");
+
+            expect(page.url()).toBe(baseUrl);
+            await expect(page).toMatchElement("#input-a");
         } finally {
-            await myPage.setOfflineMode(false);
+            await page.setOfflineMode(false);
         }
     });
 });
