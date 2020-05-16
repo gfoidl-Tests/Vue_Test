@@ -5,10 +5,12 @@ module.exports = {
     rootDir             : "../../",
     name                : "unit",
     displayName         : "unit tests",
-    moduleFileExtensions: ["js", "ts", "json"],
-    transform           : {
-        "^.+\\.ts?$": "ts-jest"
-    },
+    preset              : "ts-jest",
+    // The preset above is actually a shortcut for this:
+    //moduleFileExtensions: ["js", "ts", "json"],
+    //transform           : {
+    //    "^.+\\.ts?$": "ts-jest"
+    //},
     testMatch: [
         "**/tests/unit/**/*.ts"
     ],
