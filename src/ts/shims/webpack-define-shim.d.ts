@@ -1,3 +1,3 @@
-declare const __DEBUG__     : boolean;
-declare const VERSION       : string;
-declare const BOOTSTRAP_SKIP: boolean;
+declare const __DEBUG__        : boolean;
+declare const __VERSION__      : string;
+declare const __RUN_FROM_TEST__: boolean;

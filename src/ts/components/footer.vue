@@ -18,7 +18,7 @@
     @Component
     export default class Footer extends Vue {
         public year: number;
-        public version = VERSION;   // defined by webpack
+        public version = __VERSION__;   // defined by webpack
         //---------------------------------------------------------------------
         constructor() {
             super();

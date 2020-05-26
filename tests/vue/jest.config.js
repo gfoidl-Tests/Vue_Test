@@ -22,8 +22,8 @@ module.exports = {
     //    "^@/(.*)$"   : "<rootDir>/src/ts/$1",
     //    "^@svc/(.*)$": "<rootDir>/src/ts/services/$1"
     //},
-    globals          : {
-        VERSION       : "42",
-        BOOTSTRAP_SKIP: true
+    globals: {
+        __VERSION__      : "42",
+        __RUN_FROM_TEST__: true
     }
 };

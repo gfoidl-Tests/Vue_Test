@@ -22,7 +22,7 @@ module.exports = {
     //    "^@/(.*)$"   : "<rootDir>/src/ts/$1",
     //    "^@svc/(.*)$": "<rootDir>/src/ts/services/$1"
     //},
-    globals          : {
-        VERSION: "42"
+    globals: {
+        __VERSION__: "42"
     }
 };
