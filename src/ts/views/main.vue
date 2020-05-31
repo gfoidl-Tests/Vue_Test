@@ -121,6 +121,13 @@
             this.operation = calc.toOperation(this.input.operation);
         }
         //---------------------------------------------------------------------
+        private mounted(): void {
+            // "Notify" that the app is loaded, see index.html for usage.
+            // Dispatching an event would be better, but old browser don't support
+            // this, so the way via an global is used, as this will work everywhere.
+            appLoaded = true;
+        }
+        //---------------------------------------------------------------------
         public calculate(): void {
             this.operation = calc.toOperation(this.input.operation);
 

@@ -1,4 +1,4 @@
-<!DOCTYPE html>
+﻿<!DOCTYPE html>
 
 <html lang="en">
 <head>
@@ -11,13 +11,25 @@
     <!--<link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.4.1/css/bootstrap.min.css" integrity="sha384-Vkoo8x4CGsO3+Hhxv8T/Q5PaXtkKtu6ug5TOeNV6gBiFeWPGFN9MuhOf23Q9Ifjh" crossorigin="anonymous">-->
 </head>
 <body>
-    <!-- both `div` and `app` are possible -->
-    <!--<app id="app"></app>-->
-    <div id="app">
-        Your browser is too old to work with this app.<br />
-        Upgrade to any of the latest browser-versions. Google Chrome is recommended for best experience.
-    </div>
+    <app id="app"></app>
 
     <noscript>JavaScript isn't supported or turned off by your browser. Please enable it, to use this app.</noscript>
+    <div id="notSupportedBrowserInfo" style="display: none;">
+        Your browser cannot execute this app. Simple said: your browser is too old.<br />
+        Upgrade to any of the latest browser-versions (that support ECMA Script 2015).<br /><br />
+        <a href="https://www.google.com/chrome">Google Chrome</a> is recommended for best experience.
+    </div>
+
+    <script>
+        appLoaded = false;
+        window.onerror = function handler () {
+            if (appLoaded) {
+                window.removeEventListener("error", handler);
+                return;
+            }
+
+            document.getElementById("notSupportedBrowserInfo").style.removeProperty("display");
+        };
+    </script>
 </body>
 </html>
