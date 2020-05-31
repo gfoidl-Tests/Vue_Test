@@ -15,6 +15,7 @@
         "test-vue"              : "jest --projects tests/vue --verbose",
         "test-e2e"              : "jest --projects tests/e2e --verbose --reporters=default --reporters=jest-junit",
         "test-coverage"         : "jest --verbose --reporters=default --reporters=jest-junit --coverage",
+        "supportedBrowsers"     : "browserslist-useragent-regexp --allowHigherVersions > supportedBrowsers.txt && echo see supportedBrowsers.txt",
         "alsatian-test"         : "alsatian tests/unit2/**/*.ts",
         "alsatian-test-results" : "alsatian tests/unit2/**/*.ts --tap | tap-junit -o out/tests -n test-results.xml",
         "alsatian-test-coverage": "nyc --reporter=cobertura --reporter=html yarn run unit-test && nyc report"
@@ -33,6 +34,7 @@
         "@vue/test-utils"                   : "1.0.0-beta.33",
         "alsatian"                          : "^3.2.1",
         "babel-core"                        : "^7.0.0-bridge.0",
+        "browserslist-useragent-regexp"     : "^2.0.5",
         "clean-webpack-plugin"              : "^3.0.0",
         "css-loader"                        : "^3.5.3",
         "file-loader"                       : "^6.0.0",

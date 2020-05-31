@@ -4,6 +4,13 @@ import PwaRegistrar from "./pwa-registrar";
 //-----------------------------------------------------------------------------
 Vue.config.productionTip = false;
 //-----------------------------------------------------------------------------
+// If the app start, remove this old-browser-hint
+const notSupportedBrowserInfo = document.getElementById("notSupportedBrowserInfo");
+if (notSupportedBrowserInfo) {
+    notSupportedBrowserInfo.remove();
+    console.debug("notSupportedBrowserInfo removed from DOM");
+}
+//-----------------------------------------------------------------------------
 // This would register all BootstrapVue components. It's huge.
 // So in order to keep the initial chunk size down, the App component
 // asynchronosly loads the MainView component, and this component registers
