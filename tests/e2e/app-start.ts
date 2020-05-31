@@ -19,6 +19,10 @@ describe("App Start", () => {
         await expect(page).toMatch("Calculator");
     });
     //-------------------------------------------------------------------------
+    test("notSupportedBrowserInfo is removed from DOM", async () => {
+        await expect(page).not.toMatchElement("#notSupportedBrowserInfo");
+    });
+    //-------------------------------------------------------------------------
     test("logo on right is loaded", async () => {
         const img  = await expect(page).toMatchElement(".img-logo");
         const src  = await img.getProperty("src");

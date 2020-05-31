@@ -40,7 +40,8 @@ module.exports = (env, argv) => {
         mode   : devMode ? "development" : "production",
         context: path.resolve(__dirname, "src", "ts"),  // resolve vs. join -> https://stackoverflow.com/a/39836259/347870
         entry  : {
-            app: "./app"
+            app         : "./app",
+            checkBrowser: "./checkBrowser"
         },
         resolve: {
             extensions: [".ts", ".vue", ".js"],         // when 'resolve' is not specified, in entry the extension has to be given

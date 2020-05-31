@@ -24,7 +24,6 @@ module.exports = {
     //},
     globals: {
         __VERSION__      : "42",
-        __RUN_FROM_TEST__: true,
-        appLoaded        : false
+        __RUN_FROM_TEST__: true
     }
 };
