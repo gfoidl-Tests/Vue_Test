@@ -1,4 +1,4 @@
-﻿<!DOCTYPE html>
+<!DOCTYPE html>
 
 <html lang="en">
 <head>
@@ -22,13 +22,15 @@
 
     <script>
         appLoaded = false;
-        window.onerror = function handler () {
+        window.onerror = function handler(error) {
             if (appLoaded) {
                 window.removeEventListener("error", handler);
                 return;
             }
 
-            document.getElementById("notSupportedBrowserInfo").style.removeProperty("display");
+            if (/SyntaxError/i.test(error)) {
+                document.getElementById("notSupportedBrowserInfo").style.removeProperty("display");
+            }
         };
     </script>
 </body>
