@@ -21,7 +21,7 @@ Vue.config.productionTip = false;
 
 // Here it uses a render function, so the runtime-only build can be used:
 const app = new Vue({
-    el    : "app",
+    el    : "#app",     // "app" if the element is declared as <app>, so it's a div (or any other element) with id "app"
     render: r => r(App)
 });
 
