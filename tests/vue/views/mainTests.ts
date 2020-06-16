@@ -18,10 +18,6 @@ describe("App.vue", () => {
         }
     });
     //-------------------------------------------------------------------------
-    test("test wrapper created -> correct name", () => {
-        expect(sut.name()).toBe("MainView");
-    });
-    //-------------------------------------------------------------------------
     test("no inputs -> calcButton disabled and resultCol not visible", () => {
         // get is similar to find, expect it throws an error if nothing is found.
 
