@@ -189,6 +189,13 @@ module.exports = (env, argv) => {
                         sizes      : [96, 128, 192, 256, 384, 512],
                         destination: "icons"
                     }
+                ],
+                ios      : true,
+                shortcuts: [
+                    {
+                        name: "Start",
+                        url : "/?utm_source=homescreen"
+                    }
                 ]
             })
             // workbox doesn't play nice with watch-mode, so inject these plugins separate (see below)
