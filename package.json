@@ -12,7 +12,7 @@
         "test-unit-coverage": "vitest run --coverage",
         "test-unit-watch"   : "vitest",
         "bench"             : "vitest bench",
-        "test-e2e"          : "playwright test",
+        "test-e2e"          : "playwright test --project chromium",
         "build-only"        : "vite build",
         "type-check"        : "vue-tsc --build",
         "lint"              : "run-s lint:*",
